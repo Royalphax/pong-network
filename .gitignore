@@ -98,7 +98,7 @@ fabric.properties
 
 # Built Visual Studio Code Extensions
 *.vsix
-
+*.exe
 *.xml
 *.iml
 .idea/*
