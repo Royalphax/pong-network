@@ -3,9 +3,9 @@
 <h1>Pong Network</h1>
 <p><i>Le jeu du pong, en réseau !</i><br/><b>Développeurs : </b>Charles B, Enzo G, Jean-Denis M, Jordan D, Nicolas V, Simon D, Thérence F</p>
 <h2>Liens utiles</h2>
-<a target="_blank" href="https://github.com/fabrice1618/pong">Projet initial du prof</a>
+<a href="https://github.com/fabrice1618/pong" target="blank">Projet initial du prof</a>
 <br/>
-<a target="_blank" href="https://github.com/users/Royalphax/projects/2">Backlog et suivi des tâches</a>
+<a href="https://github.com/users/Royalphax/projects/2" target="blank">Backlog et suivi des tâches</a>
 <br/>
 ...
 <hr/>
@@ -40,7 +40,7 @@ PongNetwork
 ```
 
 ## Modèle d'échange de données
-<img src="https://github.com/Royalphax/pong-network/tree/master/design/modele-echange-donnees.png" width="300"/>
+<img src="https://raw.githubusercontent.com/Royalphax/pong-network/master/design/modele-echange-donnees.png?token=GHSAT0AAAAAABUXQA2CLFXFWENMNZZPJRH4YUYAAJA" width="700"/>
 
 Données transmises au serveur | Données transmises au client
 ------------------------------|------------------------------
