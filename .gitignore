@@ -52,6 +52,7 @@
 # CMake
 cmake-build-*/*
 !cmake-build-*/SDL2.dll
+!cmake-build-*/SDL2-ttf.dll
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
