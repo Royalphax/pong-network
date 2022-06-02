@@ -27,8 +27,9 @@ PongNetwork
      │   │   ├── main.cpp       # Code principal pour lancer le serveur
      │   │   └── ...
      │   │
+     │   └── common/        # Code commun au serveur et au client
      │       ├── include/       # Répertoire des librairies en commun
-     │       ├── lib.cpp        # Librairies en commun
+     │       ├── lib.cpp        # Méthodes en commun
      │       └── ...
      │
      ├── cmake/             # Gestion de la compilation
