@@ -23,6 +23,6 @@ set(SDL2_PATH "src\\client\\SDL2")
 find_package(SDL2 REQUIRED)
 set(SDL2_TTF_PATH "src\\client\\SDL2")
 find_package(SDL2_ttf REQUIRED)
-add_executable(client src/client/main.cpp src/client/gui.cpp src/client/gui.h)
+add_executable(client src/client/main.cpp)
 target_include_directories(client PUBLIC ${SDL2_INCLUDE_DIR}) # add the client's specific include file
 target_link_libraries(client client_server_lib mingw32 ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARY}) # link client with the shared library
