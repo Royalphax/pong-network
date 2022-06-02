@@ -3,7 +3,7 @@
 <h1>Pong Network</h1>
 <p><i>Le jeu du pong, en réseau !</i><br/><b>Développeurs : </b>Jean-Denis M, Nicolas V, Simon D, Thérence F</p>
 <h2>Liens utiles</h2>
-<a href="https://github.com/fabrice1618/pong" target="blank">Projet initial du prof</a>
+<a href="https://github.com/fabrice1618/pong" target="blank">Projet initial de @fabrice1618</a>
 <br/>
 <a href="https://github.com/users/Royalphax/projects/2" target="blank">Backlog et suivi des tâches</a>
 <br/>
