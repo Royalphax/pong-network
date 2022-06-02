@@ -51,6 +51,7 @@
 
 # CMake
 cmake-build-*/
+!cmake-build-*/SDL2.dll
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
@@ -102,5 +103,3 @@ fabric.properties
 *.xml
 *.iml
 .idea/*
-
-CMakeLists.txt
