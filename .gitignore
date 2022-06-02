@@ -50,7 +50,7 @@
 # *.ipr
 
 # CMake
-cmake-build-*/
+cmake-build-*/*.*
 !cmake-build-*/SDL2.dll
 
 # Mongo Explorer plugin
