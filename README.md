@@ -40,15 +40,15 @@ PongNetwork
 ```
 
 ## Modèle d'échange de données
-<img src="https://raw.githubusercontent.com/Royalphax/pong-network/master/design/modele-echange-donnees.png?token=GHSAT0AAAAAABUXQA2CLFXFWENMNZZPJRH4YUYAAJA" width="700"/>
+<img src="https://i.imgur.com/Wr3AaqO.png" width="700"/>
 
 Données transmises au serveur | Données transmises au client
 ------------------------------|------------------------------
 ToucheClavier                 | Position de la barre
-.                             | Position de la balle
-.                             | Score du client
-.                             | Score de son adversaire
-.                             | Etat de la partie (pas commencée, en cours, finie)
+-                             | Position de la balle
+-                             | Score du client
+-                             | Score de son adversaire
+-                             | Etat de la partie (pas commencée, en cours, finie)
 
 **Principe :** Le serveur reçoit si le client veut monter ou descendre sa barre et s'occupe de calculer la position de la barre puis de la balle à l'instant suivant. Une fois le calcul effectué, il transmet les informations aux clients afin qu'ils mettent à jour leur affichage.
 
