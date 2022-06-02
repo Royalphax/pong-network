@@ -17,34 +17,30 @@
 
 ```bash
 PongNetwork
-    │
-    ├── design/        # Modélisations UML
-    │   └── ...
-    │
-    ├── src/           # Code source
-    │   ├── client/        # Code du client
-    │   │   ├── main.cpp       # Code principal pour lancer le client
-    │   │   └── ...
-    │   │
-    │   ├── server/        # Code du serveur
-    │   │   ├── main.cpp       # Code principal pour lancer le serveur
-    │   │   └── ...
-    │   │
-    │   └── common/        # Code en commun
-    │       ├── include/       # Répertoire des librairies en commun
-    │       ├── lib.cpp        # Librairies en commun
-    │       └── ...
-    │
-    ├── cmake/             # Gestion de la compilation
-    │   └── modules/           # Modules de compilation
-    │       └── FindSDL2.cmake     # Trouve la lib SDL2
-    │
-    ├── cmake-build-debug/ # Cache des données de compilation
-    │   └── SDL2.dll           # Référence de la librairie SDL2    
-    │
-    ├── CMakeList.txt      # Fichier CMake pour gérer automatiquement la compilation
-    │
-    └── README.md
+     │
+     ├── src/           # Code source
+     │   ├── client/        # Code du client
+     │   │   ├── main.cpp       # Code principal pour lancer le client
+     │   │   └── ...
+     │   │
+     │   ├── server/        # Code du serveur
+     │   │   ├── main.cpp       # Code principal pour lancer le serveur
+     │   │   └── ...
+     │   │
+     │       ├── include/       # Répertoire des librairies en commun
+     │       ├── lib.cpp        # Librairies en commun
+     │       └── ...
+     │
+     ├── cmake/             # Gestion de la compilation
+     │   └── modules/           # Modules de compilation
+     │       └── FindSDL2.cmake     # Trouve la lib SDL2
+     │
+     ├── cmake-build-debug/ # Cache des données de compilation
+     │   └── SDL2.dll           # Référence de la librairie SDL2    
+     │
+     ├── CMakeList.txt      # Fichier CMake pour gérer automatiquement la compilation
+     │
+     └── README.md
 ```
 
 ## Modèle d'échange de données
