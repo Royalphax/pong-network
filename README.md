@@ -1,11 +1,13 @@
 <div align="center">
 <img src="https://media.giphy.com/media/aTGwuEFyg6d8c/giphy.gif" width="300"/>
 <h1>Pong Network</h1>
-<p><i>Le jeu du pong, en réseau !</i><br/><b>Développeurs : </b>Charles B, Enzo G, Jean-Denis M, Jordan D, Nicolas V, Simon D, Thérence F</p>
+<p><i>Le jeu du pong, en réseau !</i><br/><b>Développeurs : </b>Jean-Denis M, Nicolas V, Simon D, Thérence F</p>
 <h2>Liens utiles</h2>
 <a href="https://github.com/fabrice1618/pong" target="blank">Projet initial du prof</a>
 <br/>
 <a href="https://github.com/users/Royalphax/projects/2" target="blank">Backlog et suivi des tâches</a>
+<br/>
+<a href="https://blog.ahmadz.ai/sdl2-for-clion-and-cmake/" target="blank">Tuto installation SDL2</a>
 <br/>
 ...
 <hr/>
@@ -19,30 +21,35 @@ PongNetwork
     ├── design/        # Modélisations UML
     │   └── ...
     │
-    ├── server/        # Code du serveur
-    │   ├── run/           # Algorithmes de calcul des positions barres/balles
+    ├── src/           # Code source
+    │   ├── client/        # Code du client
+    │   │   ├── main.cpp       # Code principal pour lancer le client
     │   │   └── ...
-    │   ├── net/           # Gestion de la connexion avec le client (via socket)
+    │   │
+    │   ├── server/        # Code du serveur
+    │   │   ├── main.cpp       # Code principal pour lancer le serveur
     │   │   └── ...
-    │   ├── main.cpp       # Code principal pour lancer le serveur
-    │   └── ...
+    │   │
+    │   └── common/        # Code en commun
+    │       ├── include/       # Répertoire des librairies en commun
+    │       ├── lib.cpp        # Librairies en commun
+    │       └── ...
     │
-    ├── client/        # Code du client
-    │   ├── gui/           # Gestion de l'interface (OpenGL?)
-    │   │   └── ...
-    │   ├── net/           # Gestion de la connexion avec le serveur (via socket)
-    │   │   └── ...
-    │   ├── main.cpp       # Code principal pour lancer le client
-    │   └── ...
+    ├── cmake/             # Gestion de la compilation
+    │   └── modules/           # Modules de compilation
+    │       └── FindSDL2.cmake     # Trouve la lib SDL2
     │
-    ├── README.md
-    └── ...
+    ├── cmake-build-debug/ # Cache des données de compilation
+    │   └── SDL2.dll           # Référence de la librairie SDL2    
+    │
+    ├── CMakeList.txt      # Fichier CMake pour gérer automatiquement la compilation
+    │
+    └── README.md
 ```
 
 ## Modèle d'échange de données
-<img src="https://i.imgur.com/Wr3AaqO.png" width="700"/>
 
-Données transmises au serveur | Données transmises au client
+Données transmises au serveur par les clients | Données transmises aux clients par le serveur
 ------------------------------|------------------------------
 ToucheClavier                 | Position de la barre
 .                             | Position de la balle
