@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+message ServerPacket {
+  required int32 ballX = 1;
+  required int32 ballY = 2;
+  required int32 paddleX = 3;
+  required int32 paddleY = 4;
+  required int32 clientScore = 5;
+  required int32 enemyScore = 6;
+
+  enum GameState {
+    GAME_MENU = 0;
+    GAME_START = 1;
+    GAME_PLAY = 2;
+    GAME_OVER = 3;
+    GAME_QUIT = 4;
+  }
+
+  required GameState gameState = 7;
+}

@@ -1,11 +1,10 @@
-//Using libs SDL2, glibc
-#include <SDL.h>	//SDL version 2.0
+// SDL2 includes
+#include <SDL.h>
 #include <SDL_ttf.h>
 extern DECLSPEC int SDLCALL TTF_Init(void);
 
+// System includes
 #include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
 
 #ifndef MAX
 #define MAX(x,y) (((x)>(y))? (x) : (y))
@@ -14,6 +13,10 @@ extern DECLSPEC int SDLCALL TTF_Init(void);
 #ifndef MIN
 #define MIN(x,y) (((x)<(y))? (x) : (y))
 #endif
+
+// Common includes
+#include "clientpacket.pb.h"
+#include "GameState.h"
 
 // Game configuration
 SDL_Color gameColor = {255,255,255,255};
@@ -30,10 +33,6 @@ SDL_Color gameColor = {255,255,255,255};
 typedef struct ball_s {
     int dx, dy; /* movement vector */
 } ball_move_t;
-
-enum paddle_direction { PADDLE_DOWN, PADDLE_UP };
-
-enum game_state { GAME_MENU, GAME_START, GAME_PLAY, GAME_OVER, GAME_QUIT };
 
 // Program globals
 SDL_Rect ball;
@@ -159,7 +158,7 @@ static void move_paddle_ai()
 
 static void move_paddle(int paddleNum, int paddleDirection)
 {
-    if (paddleDirection == PADDLE_DOWN) {
+    if (paddleDirection == ClientPacket_PaddleDirection_PADDLE_DOWN) {
         // if the down arrow is pressed move paddle down
         paddle[paddleNum].y += 5;
 

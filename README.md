@@ -9,6 +9,8 @@
 <br/>
 <a href="https://blog.ahmadz.ai/sdl2-for-clion-and-cmake/" target="blank">Tuto installation SDL2</a>
 <br/>
+<a href="https://www.geeksforgeeks.org/handling-multiple-clients-on-server-with-multithreading-using-socket-programming-in-c-cpp/" target="blank">Tuto socket C++</a>
+<br/>
 ...
 <hr/>
 </div>
