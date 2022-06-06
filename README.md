@@ -11,6 +11,8 @@
 <br/>
 <a href="https://www.geeksforgeeks.org/handling-multiple-clients-on-server-with-multithreading-using-socket-programming-in-c-cpp/" target="blank">Tuto socket C++</a>
 <br/>
+<a href="https://gamedev.stackexchange.com/questions/197232/how-to-create-editable-sdl2-text-input-boxes" target="blank">Création entrée textuelle SDL2</a>
+<br/>
 ...
 <hr/>
 </div>
