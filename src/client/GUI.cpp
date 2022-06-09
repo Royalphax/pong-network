@@ -4,6 +4,7 @@
 
 #include "GUI.h"
 #include "Constant.h"
+#include <string>
 
 extern DECLSPEC int SDLCALL TTF_Init(void);
 
@@ -111,16 +112,26 @@ void GUI::drawText(int posX, int posY, const string &message, TTF_Font *police, 
 }
 
 void GUI::drawWinnerMenu() {
-    char messageWinner[20] = "";
+    string messageWinner = "";
     int posX, posY;
+    int titleX, titleY;
+    string pseudo_user = "Coucou";
+
+    titleX = screen->w / 2;
+    titleY = screen->h / 2;
 
     // TODO: Afficher le bon nom du gagnant
-    strcpy(messageWinner, "Player 2 wins");
+    messageWinner = pseudo_user + (string) " wins";
+
+    drawText(titleX, titleY - 100, "Pong Network", fontBig);
 
     posX = screen->w / 2;
     posY = screen->h / 2;
 
+    //print du pseudo avec message de win en dessous
     drawText(posX, posY, messageWinner, fontBig);
+
+    //print du Game over
     drawText(posX, posY + 90, "Game over", fontNormal);
 
     drawText(50, screen->h - 50, "[ECHAP] pour quitter", fontSmall, LEFT);

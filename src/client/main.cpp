@@ -1,9 +1,10 @@
 #include "GUI.h"
 #include "GUIState.h"
 #include "Constant.h"
+#include "ClientPacket.h"
 
 GUIState state = START_MENU;
-Cl
+
 
 int main(int argc, char *args[]) {
     int sleep_time = 0;
@@ -112,6 +113,7 @@ int main(int argc, char *args[]) {
                 break;
 
             case WINNER_MENU:
+                SDL_Log("draw winnerMenu");
                 gui.drawWinnerMenu();
                 break;
 
