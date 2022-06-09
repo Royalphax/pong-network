@@ -2,7 +2,7 @@
 #include "GUIState.h"
 #include "Constant.h"
 
-GUIState state = UNKNOWN;
+GUIState state = START_MENU;
 
 int main(int argc, char *args[]) {
     int sleep_time = 0;
@@ -25,7 +25,7 @@ int main(int argc, char *args[]) {
         }
 
         // Traiter les événements clavier
-        const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+        const Uint8 *keystate = SDL_GetKeyboardState(nullptr);
 
         if (keystate[SDL_SCANCODE_ESCAPE]) {
             state = QUIT;
@@ -33,23 +33,24 @@ int main(int argc, char *args[]) {
         switch (state) {
             case START_MENU:
                 if (keystate[SDL_SCANCODE_RIGHT])
-                    // TODO: check if name filled
                     state = CONNECT_MENU;
+                if (keystate[SDL_SCANCODE_R]) {
+                    // TODO: Changer pseudo de l'utilisateur parmis une liste
+                }
                 break;
             case CONNECT_MENU:
                 if (keystate[SDL_SCANCODE_LEFT])
                     state = START_MENU;
-                if (keystate[SDL_SCANCODE_RIGHT])
-                    // TODO: try to connect to ip, if it works go to waiting menu
+                // TODO: Lancer la tentative de connexion au serveur (si ça fonctionne, passer au menu d'attente)
                 break;
             case WAIT_MENU:
-                // TODO: keep this menu while server packet has no enemy
+                // TODO: Passer au menu INGAME_MENU dès lors qu'un enemi est indiqué dans le ServerPacket
             case INGAME_MENU:
                 if (keystate[SDL_SCANCODE_DOWN] || keystate[SDL_SCANCODE_A]) {
-                    // TODO: save next move for client packet to down
+                    // TODO: Sauvegarder le contenu du prochain move du client a paddle down
                 }
                 if (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_Q]) {
-                    // TODO: save next move for client packet to up
+                    // TODO: Sauvegarder le contenu du prochain move du client a paddle up
                 }
                 break;
             /*case GAME_OVER:
@@ -59,23 +60,35 @@ int main(int argc, char *args[]) {
                     score[1] = 0;
                 }
                 break;*/
+            case UNKNOWN:
+                break;
+            case WINNER_MENU:
+                break;
+            case QUIT:
+                break;
         }
 
         // Draw background
         gui.updateBackground();
 
-        /*switch (state) {
-            case GAME_MENU:
-                draw_menu();
+        switch (state) {
+            case START_MENU:
+                gui.drawStartMenu();
+                SDL_Log("draw start menu");
                 break;
 
-            case GAME_START:
-                init_game();
-                state = GAME_PLAY;
+            case CONNECT_MENU:
+                gui.drawConnectMenu();
+                SDL_Log("draw connect menu");
                 break;
 
-            case GAME_PLAY:
-                //check score
+            case WAIT_MENU:
+                gui.drawWaitMenu();
+                SDL_Log("draw wait menu");
+                break;
+
+            case INGAME_MENU:
+                /*//check score
                 if (check_score() != 0) {
                     state = GAME_OVER;
                 } else {
@@ -90,16 +103,16 @@ int main(int argc, char *args[]) {
                         draw_ball();
                         draw_score();
                     }
-                }
+                }*/
                 break;
 
-            case GAME_OVER:
-                draw_game_over();
+            case WINNER_MENU:
+                gui.drawWinnerMenu();
                 break;
 
-            case GAME_QUIT:
+            default:
                 break;
-        }*/
+        }
 
         // Draw to the display
         gui.updateDisplay();
