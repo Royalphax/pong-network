@@ -3,6 +3,7 @@
 #include "Constant.h"
 
 GUIState state = START_MENU;
+Cl
 
 int main(int argc, char *args[]) {
     int sleep_time = 0;
@@ -34,6 +35,10 @@ int main(int argc, char *args[]) {
             case START_MENU:
                 if (keystate[SDL_SCANCODE_RIGHT])
                     state = CONNECT_MENU;
+                /////// CODE TEMPORAIRE POUR CHARLES
+                if (keystate[SDL_SCANCODE_U])
+                    state = WINNER_MENU;
+                /////// CODE TEMPORAIRE POUR CHARLES
                 if (keystate[SDL_SCANCODE_R]) {
                     // TODO: Changer pseudo de l'utilisateur parmis une liste
                 }

@@ -122,6 +122,8 @@ void GUI::drawWinnerMenu() {
 
     drawText(posX, posY, messageWinner, fontBig);
     drawText(posX, posY + 90, "Game over", fontNormal);
+
+    drawText(50, screen->h - 50, "[ECHAP] pour quitter", fontSmall, LEFT);
 }
 
 int blinkTextTick = 0;
