@@ -21,6 +21,7 @@ static int getPaddleDirectionIndex(PaddleDirection paddleDir) {
         case PADDLE_UP:
             return 2;
     }
+    return -1;
 }
 
 #endif //PONG_NETWORK_PADDLEDIRECTION_H

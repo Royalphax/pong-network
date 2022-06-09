@@ -9,26 +9,38 @@
 #include <string>
 #include <stdexcept>
 #include <utility>
+#include <random>
+#include <UUID.h>
+
 using namespace std;
 
 class Player {
 
 private:
     static list<Player> users;
-    static string usernames[] = {"CarPong","RoninPong","PongCyber","PongSea","SunrisePong","BoyPong","PongWolf","PongRex","BlackPong","AuraPong","CaptainPong","PongPredator"};
+    list<string> usernames = {"CarPong","RoninPong","PongCyber","PongSea","SunrisePong","BoyPong","PongWolf","PongRex","BlackPong","AuraPong","CaptainPong","PongPredator"};
 
 public:
-    string uuid;
-    string name;
-    int score;
+    string uuid = "null";
+    string name = "null";
+    int score = 0;
+
+    void generateUUID() {
+        uuid = uuid::generate_uuid_v4();
+    }
 
     void getNewRandomName() {
-        srand(time(0));
-        string newname = name;
-        while (newname == name) {
-            newname = usernames[rand() * usernames.length()];
+        random_device r;
+        mt19937 engine{r()};
+        uniform_int_distribution<int> distribution(0,(int) usernames.size() - 1);
+
+        string newName = name;
+        while (newName == name) {
+            auto it = usernames.begin();
+            advance(it, distribution(engine));
+            newName = *it;
         }
-        name = newname;
+        name = newName;
     }
 
     static void createNewPlayer(string uuid, string name) {

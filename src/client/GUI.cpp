@@ -111,28 +111,17 @@ void GUI::drawText(int posX, int posY, const string &message, TTF_Font *police, 
     SDL_FreeSurface(text_surface);
 }
 
-void GUI::drawWinnerMenu() {
-    string messageWinner = "";
-    int posX, posY;
+void GUI::drawWinnerMenu(string winnerName) {
     int titleX, titleY;
-    string pseudo_user = "Coucou";
 
     titleX = screen->w / 2;
     titleY = screen->h / 2;
 
     // TODO: Afficher le bon nom du gagnant
-    messageWinner = pseudo_user + (string) " wins";
+    drawText(titleX, titleY - 100, "FIN DU JEU", fontBig);
 
-    drawText(titleX, titleY - 100, "Pong Network", fontBig);
-
-    posX = screen->w / 2;
-    posY = screen->h / 2;
-
-    //print du pseudo avec message de win en dessous
-    drawText(posX, posY, messageWinner, fontBig);
-
-    //print du Game over
-    drawText(posX, posY + 90, "Game over", fontNormal);
+    drawText(titleX, titleY, "10 - 8", fontSmall);
+    drawText(titleX, titleY + 30, winnerName + " est le grand gagnant", fontNormal);
 
     drawText(50, screen->h - 50, "[ECHAP] pour quitter", fontSmall, LEFT);
 }
@@ -140,7 +129,7 @@ void GUI::drawWinnerMenu() {
 int blinkTextTick = 0;
 #define MAX_BLINK_TEXT_TICK 50
 
-void GUI::drawStartMenu() {
+void GUI::drawStartMenu(const string& localPlayerName) {
     int titleX, titleY;
 
     titleX = screen->w / 2;
@@ -152,7 +141,7 @@ void GUI::drawStartMenu() {
     drawText(titleX, titleY - 100, "Pong Network", fontBig);
 
     drawText(titleX, titleY, "Ton Pseudo :", fontSmall);
-    drawText(titleX, titleY + 30, "Player1", fontNormal);
+    drawText(titleX, titleY + 30, localPlayerName, fontNormal);
 
     if (blinkTextTick > 0)
         drawText(titleX, titleY + 100, "Appuyez sur [FLECHE DROITE] pour commencer", fontSmall);
