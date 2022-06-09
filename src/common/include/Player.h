@@ -15,11 +15,21 @@ class Player {
 
 private:
     static list<Player> users;
+    static string usernames[] = {"CarPong","RoninPong","PongCyber","PongSea","SunrisePong","BoyPong","PongWolf","PongRex","BlackPong","AuraPong","CaptainPong","PongPredator"};
 
 public:
     string uuid;
     string name;
     int score;
+
+    void getNewRandomName() {
+        srand(time(0));
+        string newname = name;
+        while (newname == name) {
+            newname = usernames[rand() * usernames.length()];
+        }
+        name = newname;
+    }
 
     static void createNewPlayer(string uuid, string name) {
         Player u;
