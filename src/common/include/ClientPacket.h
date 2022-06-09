@@ -12,7 +12,7 @@
 using namespace std;
 using namespace nlohmann;
 
-class ClientPacket {
+class ClientPacket { // Packet envoyé du client au serveur
 public:
     string uuid;
     string name;

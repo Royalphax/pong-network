@@ -15,9 +15,9 @@ using namespace nlohmann;
 typedef struct Client {
     int paddleX, paddleY, score;
     string name;
-};
+} client;
 
-class ServerPacket {
+class ServerPacket { // Packet envoyé du serveur au client
 public:
     int ballX, ballY;
     Client rightClient, leftClient;
