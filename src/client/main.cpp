@@ -3,6 +3,7 @@
 #include "Constant.h"
 #include "ClientPacket.h"
 #include "Player.h"
+#include "SocketManager.h"
 
 int main(int argc, char *args[]) {
     try {
@@ -17,6 +18,8 @@ int main(int argc, char *args[]) {
         ClientPacket cp;
         cp.name = localPlayer.name;
         cp.uuid = localPlayer.uuid;
+
+        SocketManager sockM;
 
         GUI gui;
 
@@ -59,9 +62,9 @@ int main(int argc, char *args[]) {
                     }
                     break;
                 case CONNECT_MENU:
-                    if (newKeystate[SDL_SCANCODE_LEFT])
-                        state = START_MENU;
-                    // TODO: Lancer la tentative de connexion au serveur (si ça fonctionne, passer au menu d'attente)
+                    /*if (newKeystate[SDL_SCANCODE_LEFT])
+                        state = START_MENU;*/
+                    sockM.connect(state);
                     break;
                 case WAIT_MENU:
                     // TODO: Passer au menu INGAME_MENU dès lors qu'un enemi est indiqué dans le ServerPacket

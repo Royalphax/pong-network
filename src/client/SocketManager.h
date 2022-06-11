@@ -5,6 +5,7 @@
 #ifndef MAIN_CPP_SOCKETMANAGER_H
 #define MAIN_CPP_SOCKETMANAGER_H
 
+#include <ClientPacket.h>
 #include "GUIState.h"
 
 class SocketManager {
@@ -15,8 +16,9 @@ private:
 public:
     // TODO: définir les variables publics nécessaires
 
-    void connect(char* ip, GUIState &state); // Méthode appellée lorsque le joueur entre dans le menu de connexion au serveur
+    void connect(GUIState &state); // Méthode appellée lorsque le joueur entre dans le menu de connexion au serveur
 
+    void sendPacket(const ClientPacket& cp);
     // TODO: rajouter les fonctions nécessaires pour se connecter/gérer la connexion
 };
 

@@ -18,7 +18,7 @@ class Player {
 
 private:
     static list<Player> users;
-    list<string> usernames = {"CarPong","RoninPong","PongCyber","PongSea","SunrisePong","BoyPong","PongWolf","PongRex","BlackPong","AuraPong","CaptainPong","PongPredator"};
+    list<string> usernames = {"CarPong","MacronPong","PongCyber","PongSea","SunrisePong","BoyPong","PongWolf","PongRex","BlackPong","AuraPong","CaptainPong","PongPredator","PongBlue","PongTyra","PongPepito","MajPong","PongGhost","PongRussian","BearPong","GodPong","PongLag","ZeroPong","PongBoy","PongColossus"};
 
 public:
     string uuid = "null";

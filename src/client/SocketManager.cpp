@@ -4,7 +4,11 @@
 
 #include "SocketManager.h"
 
-void SocketManager::connect(char *ip, GUIState &state) {
+void SocketManager::connect(GUIState &state) {
     // TODO: à compléter. Fonction lorsque le client essaye d'établir la connexion avec le serveur
+
+}
+
+void SocketManager::sendPacket(const ClientPacket& cp) {
 
 }
