@@ -14,11 +14,11 @@ using namespace std;
 typedef struct Ball {
     int x, y, w, h;
     int dx, dy; /* movement vector */
-};
+} virtualBall;
 
 typedef struct Paddle {
     int x, y, w, h;
-};
+} virtualPaddle;
 
 class GameManager {
 

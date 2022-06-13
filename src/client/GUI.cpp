@@ -274,3 +274,19 @@ void GUI::quit() {
     TTF_Quit();
     SDL_Quit();
 }
+
+void GUI::drawErrorMenu(string errorMessage) {
+    if (errorMessage.empty()) errorMessage = "Une erreur est survenue";
+
+    int titleX, titleY;
+
+    titleX = screen->w / 2;
+    titleY = screen->h / 2;
+
+    drawText(titleX, titleY - 100, "ERREUR", fontBig);
+
+    drawText(titleX, titleY, errorMessage, fontSmall);
+    drawText(titleX, titleY + 30, "Veuillez redemarrer le jeu", fontNormal);
+
+    drawText(50, screen->h - 50, "[ECHAP] pour quitter", fontSmall, LEFT);
+}

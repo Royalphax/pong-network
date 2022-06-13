@@ -26,6 +26,7 @@ static int getGameStateIndex(GameState state) {
         case GAME_OVER:
             return 4;
     }
+    return -1;
 }
 
 #endif //PONG_NETWORK_GAMESTATE_H

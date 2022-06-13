@@ -40,6 +40,8 @@ public:
 
     void drawConnectMenu();
 
+    void drawErrorMenu(string errorMessage);
+
     void drawWaitMenu();
 
     void drawScore();
