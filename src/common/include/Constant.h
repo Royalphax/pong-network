@@ -17,7 +17,7 @@
 #define PADDLE_WIDTH 10
 #define PADDLE_HEIGHT 50
 
-#define SERVER_IP "127.0.0.1"
-#define SERVER_PORT "25565"
+#define SERVER_HOST "127.0.0.1"
+#define SERVER_PORT 63476
 
 #endif //PONG_NETWORK_CONSTANT_H
