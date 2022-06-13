@@ -1,9 +1,14 @@
 #include "GUI.h"
-#include "GUIState.h"
-#include "Constant.h"
-#include "ClientPacket.h"
-#include "Player.h"
+#include <ClientPacket.h>
+#include <Constant.h>
+#include <thread>
+#include <Player.h>
 #include "SocketManager.h"
+#include <thread>
+
+void lol(int i) {
+
+}
 
 int main(int argc, char *args[]) {
     try {
@@ -19,9 +24,12 @@ int main(int argc, char *args[]) {
         cp.name = localPlayer.name;
         cp.uuid = localPlayer.uuid;
 
-        SocketManager sockM;
+        bool tryingToConnect = false;
+        string errorMessage;
 
         GUI gui;
+
+        SocketManager socket = SocketManager(&cp, &state, &errorMessage);
 
         // Initialisation de la partie graphique
         int sleep_time = 0;
@@ -62,9 +70,10 @@ int main(int argc, char *args[]) {
                     }
                     break;
                 case CONNECT_MENU:
-                    /*if (newKeystate[SDL_SCANCODE_LEFT])
-                        state = START_MENU;*/
-                    sockM.connect(state);
+                    if (!tryingToConnect) {
+                        tryingToConnect = true;
+                        socket.tryConnection();
+                    }
                     break;
                 case WAIT_MENU:
                     // TODO: Passer au menu INGAME_MENU dès lors qu'un enemi est indiqué dans le ServerPacket
@@ -79,18 +88,7 @@ int main(int argc, char *args[]) {
                         cp.paddleDirection = NONE;
                     }
                     break;
-                    /*case GAME_OVER:
-                        if (keystate[SDL_SCANCODE_SPACE]) {
-                            state = GAME_START;
-                            score[0] = 0;    //reset scores
-                            score[1] = 0;
-                        }
-                        break;*/
-                case UNKNOWN:
-                    break;
-                case WINNER_MENU:
-                    break;
-                case QUIT:
+                default:
                     break;
             }
 
@@ -100,17 +98,17 @@ int main(int argc, char *args[]) {
             switch (state) {
                 case START_MENU:
                     gui.drawStartMenu(localPlayer.name);
-                    SDL_Log("draw start menu");
+                    //SDL_Log("draw start menu");
                     break;
 
                 case CONNECT_MENU:
                     gui.drawConnectMenu();
-                    SDL_Log("draw connect menu");
+                    //SDL_Log("draw connectClient menu");
                     break;
 
                 case WAIT_MENU:
                     gui.drawWaitMenu();
-                    SDL_Log("draw wait menu");
+                    //SDL_Log("draw wait menu");
                     break;
 
                 case INGAME_MENU:
@@ -133,8 +131,13 @@ int main(int argc, char *args[]) {
                     break;
 
                 case WINNER_MENU:
-                    SDL_Log("draw winnerMenu");
+                    //SDL_Log("draw winnerMenu");
+
                     gui.drawWinnerMenu("bob");
+                    break;
+
+                case ERROR_MENU:
+                    gui.drawErrorMenu(errorMessage);
                     break;
 
                 default:
@@ -159,9 +162,11 @@ int main(int argc, char *args[]) {
     } catch (const std::exception& ex) {
 
         exception_ptr p = current_exception();
-        SDL_Log((p ? p.__cxa_exception_type()->name() : "null"));
+        SDL_Log("%s", (p ? p.__cxa_exception_type()->name() : "null"));
 
     }
 
     return EXIT_SUCCESS;
 }
+
+

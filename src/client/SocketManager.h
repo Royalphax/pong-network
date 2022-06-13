@@ -5,21 +5,53 @@
 #ifndef MAIN_CPP_SOCKETMANAGER_H
 #define MAIN_CPP_SOCKETMANAGER_H
 
+// SockCPP
+#include <sockpp/tcp_connector.h>
+
 #include <ClientPacket.h>
 #include "GUIState.h"
+#include <ServerPacket.h>
+#include <Constant.h>
+#include <thread>
+
+// For log purposes
+#include <SDL.h>
+
+enum ConnectState {
+    TRYING_TO_CONNECT,
+    NOT_CONNECTED,
+    CONNECTED
+};
+
+struct bridge {
+    ClientPacket * packet;
+    GUIState * state;
+    string * errMessage;
+};
 
 class SocketManager {
 
 private:
-    // TODO: définir les variables privées nécessaires
+    ServerPacket serverPacket;
+
+    ConnectState connectState = NOT_CONNECTED;
+    ClientPacket * clientPacket;
+    GUIState * guiState;
+    string * errorMessage;
+
+    void clientThread();
 
 public:
-    // TODO: définir les variables publics nécessaires
 
-    void connect(GUIState &state); // Méthode appellée lorsque le joueur entre dans le menu de connexion au serveur
+    SocketManager(ClientPacket * cliPacket, GUIState * gState, string * errMessage);
 
-    void sendPacket(const ClientPacket& cp);
-    // TODO: rajouter les fonctions nécessaires pour se connecter/gérer la connexion
+    void tryConnection(); // Méthode appellée lorsque le joueur entre dans le menu de connexion au serveur
+
+    ServerPacket getServerPacket();
+
+
+
+
 };
 
 
