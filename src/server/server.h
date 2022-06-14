@@ -21,9 +21,35 @@ using namespace std;
 
 static void run_echo(sockpp::tcp_socket sock)
 {
-    ssize_t n;
-    char buf[512];
 
+    string s, sret;
+
+    sret.resize(BUFFER_SIZE);
+    ssize_t n = sock.read(nullptr);
+
+    if (n != ssize_t(BUFFER_SIZE)) {
+        cout << "Error reading to the TCP stream: " << sock.last_error_str() << endl;
+        return;
+    }
+
+    cout << sret << endl;
+
+    return;
+
+
+
+
+
+    ServerPacket sp;
+    string json = sp.serialize();
+    cout << json << endl;
+    cout << sizeof(json) << endl;
+    cout << json.length() << endl;
+    cout << json.size() << endl;
+    cout << json.max_size() << endl;
+
+
+    /*
     ClientPacket cp;
     ServerPacket sp;
 
@@ -43,7 +69,7 @@ static void run_echo(sockpp::tcp_socket sock)
     string json = sp.serialize();
     cout << json << endl;
 
-    sock.write(json);
+    sock.write(json);*/
 
     cout << "Connection closed from " << sock.peer_address() << endl;
 }
