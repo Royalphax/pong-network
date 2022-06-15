@@ -6,8 +6,10 @@
 #define PONG_NETWORK_SERVERPACKET_H
 
 #include <nlohmann/json.hpp>
-#include "GameState.h"
 #include <string>
+#include <Constant.h>
+#include "GameState.h"
+#include "Utils.h"
 
 using namespace std;
 using namespace nlohmann;
@@ -24,7 +26,7 @@ public:
     GameState gameState;
 
     ServerPacket() {
-        ballX = ballY;
+        ballX = ballY = 0;
         rightClient.paddleX = rightClient.paddleY = rightClient.score = 0;
         rightClient.name = "null";
         leftClient.paddleX = leftClient.paddleY = leftClient.score = 0;
@@ -45,11 +47,14 @@ public:
         output["leftClient"]["score"] = leftClient.score;
         output["leftClient"]["name"] = leftClient.name;
         output["gameState"] = getGameStateIndex(gameState);
-        return output.dump();
+        string sOut = output.dump();
+        while (sOut.length() < DATA_BUFFER_SERVER)
+            sOut.append(" ");
+        return sOut;
     }
 
     void deserialize(const string& input) {
-        auto jsonInput = json::parse(input);
+        auto jsonInput = json::parse(trim(input));
         ballX = jsonInput["ballX"];
         ballY = jsonInput["ballY"];
         rightClient.paddleX = jsonInput["rightClient"]["paddleX"];

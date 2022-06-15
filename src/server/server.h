@@ -14,62 +14,43 @@
 
 using namespace std;
 
-// --------------------------------------------------------------------------
-// The thread function. This is run in a separate thread for each socket.
-// Ownership of the socket object is transferred to the thread, so when this
-// function exits, the socket is automatically closed.
-
 static void run_echo(sockpp::tcp_socket sock)
 {
+    while (sock.is_open()) {
 
-    string s, sret;
+        string s_out, s_in;
+        // ------------ LECTURE  ------------
+        s_in.resize(DATA_BUFFER_CLIENT);
+        ssize_t n = 0;
+        while (n == 0) {
+            n = sock.read_n(&s_in[0], DATA_BUFFER_CLIENT);
+        }
 
-    sret.resize(BUFFER_SIZE);
-    ssize_t n = sock.read(nullptr);
+        if (n != DATA_BUFFER_CLIENT) {
+            cout << n << endl;
+            cout << s_in << endl;
+            cout << "Error reading to the TCP stream: " << sock.last_error_str() << endl;
+            break;
+        }
 
-    if (n != ssize_t(BUFFER_SIZE)) {
-        cout << "Error reading to the TCP stream: " << sock.last_error_str() << endl;
-        return;
+        cout << "Data received : " << trim(s_in) << endl;
+        // ------------ -------- ------------
+
+        ServerPacket sp;
+
+        // ------------ ECRITURE ------------
+        s_out = sp.serialize();
+
+        if (s_out.length() > DATA_BUFFER_SERVER) {
+            cout << "Server buffer too small" << endl;
+            break;
+        }
+
+        sock.write(s_out);
+
+        cout << "Data sent : " << trim(s_out) << endl;
+        // ------------ -------- ------------
     }
-
-    cout << sret << endl;
-
-    return;
-
-
-
-
-
-    ServerPacket sp;
-    string json = sp.serialize();
-    cout << json << endl;
-    cout << sizeof(json) << endl;
-    cout << json.length() << endl;
-    cout << json.size() << endl;
-    cout << json.max_size() << endl;
-
-
-    /*
-    ClientPacket cp;
-    ServerPacket sp;
-
-    int i = 0;
-    while (sock.read(buf, sizeof(buf)) > 0) { i++; }
-    if (i > 1) {
-        cout << "ERREUR TRAME DECOUPEE" << endl;
-    }
-
-    string buffer = buf;
-    cout << buffer << endl;
-    cp.deserialize(buf);
-
-    cout << cp.name.c_str() << endl;
-    cout << cp.uuid.c_str() << endl;
-
-    string json = sp.serialize();
-    cout << json << endl;
-
-    sock.write(json);*/
 
     cout << "Connection closed from " << sock.peer_address() << endl;
 }
@@ -91,6 +72,7 @@ static int start()
         cerr << "Error creating the acceptor: " << acc.last_error_str() << endl;
         return 1;
     }
+
     //cout << "Acceptor bound to address: " << acc.address() << endl;
     cout << "Awaiting connections on port " << port << "..." << endl;
 
