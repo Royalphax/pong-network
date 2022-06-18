@@ -27,7 +27,7 @@ int main(int argc, char* argv []) {
                 game.moveBall();
                 for (Player player : game.players)
                     game.movePaddle(&player);
-                this_thread::sleep_for(chrono::milliseconds(50));
+                this_thread::sleep_for(chrono::milliseconds(10));
                 break;
 
             case GAME_OVER:
@@ -48,9 +48,6 @@ int main(int argc, char* argv []) {
         packet.gameState = game.gameState;
         packet.ballX = game.ball.x;
         packet.ballY = game.ball.y;
-
-        // Tick
-        this_thread::sleep_for(chrono::milliseconds (5));
     }
 
     return 0;

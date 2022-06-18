@@ -91,7 +91,7 @@ void SocketManager::clientThread() {
         }
 
         serverPacket.deserialize(s_in);
-        // SDL_Log("Data received : %s", trim(s_in).c_str());
+        SDL_Log("Data received : %s", trim(s_in).c_str());
         // ------------ -------- ------------
 
         this_thread::sleep_for(chrono::milliseconds (10));

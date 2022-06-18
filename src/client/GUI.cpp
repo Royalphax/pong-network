@@ -223,10 +223,10 @@ void GUI::drawWaitMenu() {
 
 void GUI::drawScore(const string& leftName, const string& rightName, int scoreLeft, int scoreRight) {
 
-    drawText( (screen->w/2) - 85, 50, leftName, fontNormal, RIGHT );
+    drawText( (screen->w/2) - 100, 50, leftName, fontNormal, RIGHT );
     drawText( (screen->w/2) - 55, 50, to_string(scoreLeft), fontBig );
 
-    drawText( (screen->w/2) + 85, 50, rightName, fontNormal, LEFT );
+    drawText( (screen->w/2) + 100, 50, rightName, fontNormal, LEFT );
     drawText( (screen->w/2) + 55, 50, to_string(scoreRight), fontBig );
 }
 
