@@ -6,16 +6,16 @@
 #define MAIN_CPP_SOCKETMANAGER_H
 
 // SockCPP
-#include <sockpp/tcp_connector.h>
+#include "sockpp/tcp_connector.h"
 
-#include <ClientPacket.h>
+#include "ClientPacket.h"
 #include "GUIState.h"
-#include <ServerPacket.h>
-#include <Constant.h>
+#include "ServerPacket.h"
+#include "Constant.h"
 #include <thread>
 
 // For log purposes
-#include <SDL.h>
+#include "SDL.h"
 
 enum ConnectState {
     TRYING_TO_CONNECT,
@@ -39,18 +39,19 @@ private:
     GUIState * guiState;
     string * errorMessage;
 
+    bool closeConnection;
+
     void clientThread();
 
 public:
 
     SocketManager(ClientPacket * cliPacket, GUIState * gState, string * errMessage);
 
-    void tryConnection(); // Méthode appellée lorsque le joueur entre dans le menu de connexion au serveur
+    void openSocket(); // Méthode appellée lorsque le joueur entre dans le menu de connexion au serveur
+
+    void closeSocket(); // Close connections
 
     ServerPacket getServerPacket();
-
-
-
 
 };
 

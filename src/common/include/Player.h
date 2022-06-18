@@ -11,6 +11,7 @@
 #include <utility>
 #include <random>
 #include <UUID.h>
+#include "PaddleDirection.h"
 
 using namespace std;
 
@@ -18,27 +19,39 @@ class Player {
 
 private:
     static list<Player> users;
-    list<string> usernames = {"CarPong","MacronPong","PongCyber","PongSea","SunrisePong","BoyPong","PongWolf","PongRex","BlackPong","AuraPong","CaptainPong","PongPredator","PongBlue","PongTyra","PongPepito","MajPong","PongGhost","PongRussian","BearPong","GodPong","PongLag","ZeroPong","PongBoy","PongColossus"};
+    list<string> usernames = {"War","Car","Macron","Cyber","Sea","Sunrise","Boy","Girl","Wolf","Rex","Black","Aura","Captain","Predator","Blue","Tyra","Pepito","Ghost","Russian","Bear","God","Lag","Zero","Colossus","Dick","Glass","Mario","Pika","Fist","First"};
 
 public:
-    string uuid = "null";
-    string name = "null";
-    int score = 0;
+    string uuid = "null", name = "null";
+    int score = 0, paddleX = 0, paddleY = 0;
+    PaddleDirection paddleDir = NONE;
+
+    void clear() {
+        uuid = name = "null";
+        score = paddleX = paddleY = 0;
+        paddleDir = NONE;
+    }
 
     void generateUUID() {
-        uuid = uuid::generate_uuid_v4();
+        uuid = UUID().to_string();
     }
 
     void getNewRandomName() {
         random_device r;
         mt19937 engine{r()};
-        uniform_int_distribution<int> distribution(0,(int) usernames.size() - 1);
+        uniform_int_distribution<int> distrib1(0,(int) usernames.size() - 1);
+        uniform_int_distribution<int> distrib2(0,1);
 
-        string newName = name;
-        while (newName == name) {
+        string newName;
+        while (newName.empty() || "Pong" + newName == name || newName + "Pong" == name) {
             auto it = usernames.begin();
-            advance(it, distribution(engine));
+            advance(it, distrib1(engine));
             newName = *it;
+        }
+        if (distrib2(engine)) {
+            newName = newName + "Pong";
+        } else {
+            newName = "Pong" + newName;
         }
         name = newName;
     }

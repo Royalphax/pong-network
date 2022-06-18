@@ -5,8 +5,8 @@
 #ifndef PONG_NETWORK_GUI_H
 #define PONG_NETWORK_GUI_H
 
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include "SDL.h"
+#include "SDL_ttf.h"
 #include <string>
 
 using namespace std;
@@ -34,7 +34,7 @@ public:
 
     void drawText(int posX, int posY, const string& message, TTF_Font* police, TextAlign alignment = CENTER);
 
-    void drawWinnerMenu(string winnerName);
+    void drawWinnerMenu(const string& winnerName);
 
     void drawStartMenu(const string& localPlayerName);
 
@@ -44,13 +44,13 @@ public:
 
     void drawWaitMenu();
 
-    void drawScore();
+    void drawScore(int scoreLeft, int scoreRight);
 
     void drawNet();
 
-    void drawBall();
+    void drawBall(int x, int y);
 
-    void drawPaddle();
+    void drawPaddles(int leftX, int leftY, int rightX, int rightY);
 
     void updateBackground();
 

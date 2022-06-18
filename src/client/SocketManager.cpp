@@ -8,18 +8,17 @@ SocketManager::SocketManager(ClientPacket * cliPacket, GUIState * gState, string
     clientPacket = cliPacket;
     guiState = gState;
     errorMessage = errMessage;
+    closeConnection = false;
 }
 
-void SocketManager::tryConnection() {
+void SocketManager::openSocket() {
     if (connectState != NOT_CONNECTED) return;
+
     connectState = TRYING_TO_CONNECT;
+    closeConnection = false;
 
-    std::thread socketThread(&SocketManager::clientThread, this);
+    thread socketThread(&SocketManager::clientThread, this);
     socketThread.detach();
-    // Suspend execution of
-    // calling thread
-    // pthread_join(tid, NULL);
-
 }
 
 void SocketManager::clientThread() {
@@ -40,17 +39,29 @@ void SocketManager::clientThread() {
         return;
     }
 
-    SDL_Log("Created a connection from %s", conn.address().to_string().c_str());
+    SDL_Log("Connected from %s", conn.address().to_string().c_str());
 
     // Set a timeout for the responses
     if (!conn.read_timeout(chrono::seconds(5))) {
-        SDL_Log("Error setting timeout on TCP stream: ", conn.last_error_str().c_str());
+        SDL_Log("Error setting timeout on TCP stream: %s", conn.last_error_str().c_str());
         *errorMessage = "Erreur de timeout";
         *guiState = ERROR_MENU;
     }
 
+    // Officialy connected
+    connectState = CONNECTED;
 
     while (true) {
+
+        if (closeConnection) {
+            if (!conn.close()) {
+                SDL_Log("Error on closing socket: %s", conn.last_error_str().c_str());
+                *errorMessage = "Erreur lors de la fermeture de la connexion";
+                *guiState = ERROR_MENU;
+            }
+            connectState = NOT_CONNECTED;
+            break;
+        }
 
         string s_out, s_in;
         // ------------ ECRITURE ------------
@@ -65,7 +76,7 @@ void SocketManager::clientThread() {
 
         conn.write(s_out);
 
-        SDL_Log("Data sent : %s", trim(s_out).c_str());
+        // SDL_Log("Data sent : %s", trim(s_out).c_str());
         // ------------ -------- ------------
 
         // ------------ LECTURE  ------------
@@ -79,11 +90,18 @@ void SocketManager::clientThread() {
             return;
         }
 
-        SDL_Log("Data received : %s", trim(s_in).c_str());
+        serverPacket.deserialize(s_in);
+        // SDL_Log("Data received : %s", trim(s_in).c_str());
         // ------------ -------- ------------
 
         this_thread::sleep_for(chrono::seconds(1));
 
+    }
+
+    if (!conn.close()) {
+        SDL_Log("Error on closing stream: %s", conn.last_error_str().c_str());
+        *errorMessage = "Erreur lors de la fermeture de la connexion";
+        *guiState = ERROR_MENU;
     }
 
     if (!conn) {
@@ -91,8 +109,14 @@ void SocketManager::clientThread() {
         *errorMessage = "Erreur de connexion";
         *guiState = ERROR_MENU;
     }
+
+    SDL_Log("Disconnected");
 }
 
 ServerPacket SocketManager::getServerPacket() {
     return serverPacket;
+}
+
+void SocketManager::closeSocket() {
+    closeConnection = true;
 }

@@ -8,21 +8,17 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <Constant.h>
+#include "Player.h"
 #include "GameState.h"
 #include "Utils.h"
 
 using namespace std;
 using namespace nlohmann;
 
-typedef struct Client {
-    int paddleX, paddleY, score;
-    string name;
-} client;
-
 class ServerPacket { // Packet envoyé du serveur au client
 public:
     int ballX, ballY;
-    Client rightClient, leftClient;
+    Player rightClient, leftClient;
     GameState gameState;
 
     ServerPacket() {
@@ -32,6 +28,33 @@ public:
         leftClient.paddleX = leftClient.paddleY = leftClient.score = 0;
         leftClient.name = "null";
         gameState = UNKNOWN;
+    }
+
+    bool isRight(const Player& me) const {
+        return rightClient.name == me.name;
+    }
+
+    bool isEnemyConnected(const Player& me) const {
+        if (rightClient.name == me.name && leftClient.name != "null") {
+            return true;
+        } else if (leftClient.name == me.name && rightClient.name != "null") {
+            return true;
+        }
+        return false;
+    }
+
+    void updateLeftClient(const Player& player) {
+        leftClient.paddleX = player.paddleX;
+        leftClient.paddleY = player.paddleY;
+        leftClient.score = player.score;
+        leftClient.name = player.name;
+    }
+
+    void updateRightClient(const Player& player) {
+        rightClient.paddleX = player.paddleX;
+        rightClient.paddleY = player.paddleY;
+        rightClient.score = player.score;
+        rightClient.name = player.name;
     }
 
     string serialize() {

@@ -8,13 +8,19 @@
 #include <random>
 #include <sstream>
 
-namespace uuid {
-    std::random_device              rd;
-    std::mt19937                    gen(rd());
-    std::uniform_int_distribution<> dis(0, 15);
-    std::uniform_int_distribution<> dis2(8, 11);
+using namespace std;
 
-    std::string generate_uuid_v4() {
+class UUID {
+
+private:
+    string uuid;
+
+    std::string generate_v4() {
+        random_device r;
+        mt19937 gen{r()};
+        uniform_int_distribution<int> dis(0, 15);
+        uniform_int_distribution<int> dis2(8, 11);
+
         std::stringstream ss;
         int i;
         ss << std::hex;
@@ -40,7 +46,17 @@ namespace uuid {
         };
         return ss.str();
     }
-}
 
+public:
+
+    UUID() {
+        uuid = generate_v4();
+    }
+
+    string to_string() {
+        return uuid;
+    }
+
+};
 
 #endif //PONG_NETWORK_UUID_H

@@ -64,6 +64,21 @@ int GUI::initGUI() {
         return 1;
     }
 
+    ball.x = screen->w / 2;
+    ball.y = screen->h / 2;
+    ball.w = 10;
+    ball.h = 10;
+
+    paddle[0].x = 20;
+    paddle[0].y = screen->h / 2 - 50 ;
+    paddle[0].w = 10;
+    paddle[0].h = 50;
+
+    paddle[1].x = screen->w - 20 - 10;
+    paddle[1].y = screen->h / 2 - 50;
+    paddle[1].w = 10;
+    paddle[1].h = 50;
+
     return 0;
 }
 
@@ -111,13 +126,12 @@ void GUI::drawText(int posX, int posY, const string &message, TTF_Font *police, 
     SDL_FreeSurface(text_surface);
 }
 
-void GUI::drawWinnerMenu(string winnerName) {
+void GUI::drawWinnerMenu(const string& winnerName) {
     int titleX, titleY;
 
     titleX = screen->w / 2;
     titleY = screen->h / 2;
 
-    // TODO: Afficher le bon nom du gagnant
     drawText(titleX, titleY - 100, "FIN DU JEU", fontBig);
 
     drawText(titleX, titleY, "10 - 8", fontSmall);
@@ -207,14 +221,14 @@ void GUI::drawWaitMenu() {
 }
 
 
-void GUI::drawScore() {
-    /*char str_score[] = "0";
+void GUI::drawScore(int scoreLeft, int scoreRight) {
+    char str_score[] = "0";
 
-    str_score[0] = '0' + score[0];
+    str_score[0] = '0' + scoreLeft;
     drawText( (screen->w/2) - 55, 20, str_score, fontBig );
 
-    str_score[0] = '0' + score[1];
-    drawText( (screen->w/2) + 55, 20, str_score, fontBig );*/
+    str_score[0] = '0' + scoreRight;
+    drawText( (screen->w/2) + 55, 20, str_score, fontBig );
 }
 
 void GUI::drawNet() {
@@ -234,13 +248,24 @@ void GUI::drawNet() {
     }
 }
 
-void GUI::drawBall() {
+void GUI::drawBall(int x, int y) {
+
+    ball.x = x;
+    ball.y = y;
+
     if (SDL_FillRect(screen, &ball, SCREEN_FG) != 0) {
         SDL_Log("fill rectangle failed in func draw_ball()");
     }
 }
 
-void GUI::drawPaddle() {
+void GUI::drawPaddles(int leftX, int leftY, int rightX, int rightY) {
+
+    paddle[0].x = leftX;
+    paddle[0].y = leftY;
+
+    paddle[1].x = rightX;
+    paddle[1].y = rightY;
+
     for (auto &i: paddle) {
         if (SDL_FillRect(screen, &i, SCREEN_FG) != 0) {
             SDL_Log("fill rectangle failed in func draw_paddle()");
@@ -289,4 +314,5 @@ void GUI::drawErrorMenu(string errorMessage) {
     drawText(titleX, titleY + 30, "Veuillez redemarrer le jeu", fontNormal);
 
     drawText(50, screen->h - 50, "[ECHAP] pour quitter", fontSmall, LEFT);
+    drawText(50, screen->h - 75, "[FLECHE GAUCHE] retour au menu principal", fontSmall, LEFT);
 }

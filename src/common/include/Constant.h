@@ -9,13 +9,14 @@
 #define SCREEN_HEIGHT 600
 #define SCREEN_FG 0xffffffff
 #define SCREEN_BG 0x000000ff
-#define SCORE_WIN 3
+#define WIN_SCORE 3
 #define LOOP_TIME 20	// 50 frames par seconde
 
 #define BALL_WIDTH 10
 #define BALL_HEIGHT 10
 #define PADDLE_WIDTH 10
 #define PADDLE_HEIGHT 50
+#define PADDLE_STEP 5
 
 #define SERVER_HOST "127.0.0.1"
 #define SERVER_PORT 63476

@@ -7,24 +7,21 @@
 
 enum GameState {
     UNKNOWN = 0,
-    WAITING_PLAYER = 1,
-    GAME_START = 2,
-    GAME_PLAY = 3,
-    GAME_OVER = 4
+    GAME_START = 1,
+    GAME_PLAY = 2,
+    GAME_OVER = 3
 };
 
 static int getGameStateIndex(GameState state) {
     switch (state) {
         case UNKNOWN:
             return 0;
-        case WAITING_PLAYER:
-            return 1;
         case GAME_START:
-            return 2;
+            return 1;
         case GAME_PLAY:
-            return 3;
+            return 2;
         case GAME_OVER:
-            return 4;
+            return 3;
     }
     return -1;
 }

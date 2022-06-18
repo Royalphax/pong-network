@@ -3,52 +3,38 @@
 //
 
 #include "GameManager.h"
-
-GameManager::GameManager() {
-
-}
+#include <Utils.h>
 
 void GameManager::initGame() {
-    /*ball.x = SCREEN_WIDTH / 2;
+    ball.x = SCREEN_WIDTH / 2;
     ball.y = SCREEN_HEIGHT / 2;
-    ball.w = 10;
-    ball.h = 10;
     ball.dy = 1;
     ball.dx = 1;
 
-    paddle[0].x = 20;
-    paddle[0].y = SCREEN_HEIGHT / 2 - 50 ;
-    paddle[0].w = 10;
-    paddle[0].h = 50;
+    players[0].paddleX = 20;
+    players[0].paddleY = SCREEN_HEIGHT / 2 - 50 ;
 
-    paddle[1].x = SCREEN_WIDTH - 20 - 10;
-    paddle[1].y = SCREEN_HEIGHT / 2 - 50;
-    paddle[1].w = 10;
-    paddle[1].h = 50;*/
-}
-
-string GameManager::checkScore() {
-    /*for(int i = 0; i < 2; i++)
-        if ( score[i] == SCORE_WIN )
-            return(i+1);
-
-    return 0;*/
+    players[1].paddleX = SCREEN_WIDTH - 20 - 10;
+    players[1].paddleY = SCREEN_HEIGHT / 2 - 50;
 }
 
 void GameManager::moveBall() {
-    /*// Move the ball by its motion vector.
+    // Move the ball by its motion vector.
     ball.x += ball.dx;
     ball.y += ball.dy;
 
     // Balle sortie laterale
     if (ball.x < 0) {
-        score[1] += 1;
-        state  = GAME_START;
+        players[0].score += 1;
+        if (players[0].score == WIN_SCORE)
+            gameState = GAME_OVER;
         return;
     }
+
     if (ball.x > SCREEN_WIDTH - 10) {
-        score[0] += 1;
-        state  = GAME_START;
+        players[1].score += 1;
+        if (players[1].score == WIN_SCORE)
+            gameState = GAME_OVER;
         return;
     }
 
@@ -57,39 +43,76 @@ void GameManager::moveBall() {
         ball.dy = -ball.dy;
     }
 
-    //check for collision with the paddle
-    for (int i = 0; i < 2; i++) {
+    // Check for collision with the paddle
+    for (const Player& player : players) {
 
-        //collision detected	
-        if ( SDL_HasIntersection(&ball, &paddle[i]) ) {
+        // Collision detected
+        if (hasIntersection(ball.x, ball.y, BALL_HEIGHT, BALL_WIDTH, player.paddleX, player.paddleY, PADDLE_HEIGHT, PADDLE_WIDTH)) {
 
             // Accelerer la balle			
-            ball_move.dx +=  (ball_move.dx < 0) ? -1: 1;
+            ball.dx +=  (ball.dx < 0) ? -1: 1;
             //change ball direction
-            ball_move.dx = -ball_move.dx;
+            ball.dx = -ball.dx;
 
-            //change ball angle based on where on the paddle it hit
-            int hit_pos = (paddle[i].y + paddle[i].h) - ball.y;
-            ball_move.dy = 4 - (int)(hit_pos / 7);
+            // Change ball angle based on where on the paddle it hit
+            int hit_pos = (player.paddleY + PADDLE_HEIGHT) - ball.y;
+            ball.dy = 4 - (int)(hit_pos / 7);
         }
-    }*/
+    }
 }
 
-void GameManager::movePaddle(int userId, PaddleDirection paddleDirection) {
-    /*if (paddleDirection == PADDLE_DOWN) {
-        // if the down arrow is pressed move paddle down
-        paddle[paddleNum].y += 5;
+void GameManager::movePaddle(Player player, PaddleDirection paddleDirection) {
+    if (paddleDirection == NONE) return;
 
-        if(paddle[paddleNum].y >= SCREEN_HEIGHT - paddle[paddleNum].h) {
-            paddle[paddleNum].y = SCREEN_HEIGHT - paddle[paddleNum].h;
+    if (paddleDirection == PADDLE_DOWN) {
+        // if the down arrow is pressed move paddle down
+        player.paddleY += PADDLE_STEP;
+
+        if(player.paddleY >= SCREEN_HEIGHT - PADDLE_HEIGHT) {
+            player.paddleY = SCREEN_HEIGHT - PADDLE_HEIGHT;
         }
     } else if (paddleDirection == PADDLE_UP) {
         // if the up arrow is pressed move paddle up
-        paddle[paddleNum].y -= 5;
+        player.paddleY -= PADDLE_STEP;
 
-        if(paddle[paddleNum].y <= 0) {
-            paddle[paddleNum].y = 0;
+        if(player.paddleY <= 0) {
+            player.paddleY = 0;
         }
-    }*/
+    }
 }
 
+bool GameManager::isGameFull() {
+    return (players[0].name != "null" and players[1].name != "null");
+}
+
+void GameManager::updatePlayer(const ClientPacket& clientPacket) {
+    // Mise à jour
+    for (Player player : players)
+        if (player.uuid == clientPacket.uuid) {
+            movePaddle(player, clientPacket.paddleDirection);
+            player.paddleDir = clientPacket.paddleDirection;
+            return;
+        }
+    // Inscription
+    if (players[0].name == "null") {
+        players[0].uuid = clientPacket.uuid;
+        players[0].name = clientPacket.name;
+    } else if (players[1].name == "null") {
+        players[1].uuid = clientPacket.uuid;
+        players[1].name = clientPacket.name;
+    }
+}
+
+void GameManager::disconnectPlayer(string uuid) {
+    if (gameState == GAME_START) {
+        players[0].clear();
+    } else if (gameState == GAME_PLAY) {
+        if (players[0].uuid == uuid) {
+            players[0].score = 0;
+            gameState = GAME_OVER;
+        } else if (players[1].uuid == uuid) {
+            players[1].score = 0;
+            gameState = GAME_OVER;
+        }
+    }
+}

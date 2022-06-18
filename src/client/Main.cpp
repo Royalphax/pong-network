@@ -16,7 +16,7 @@ int main(int argc, char *args[]) {
         // Initialisation des variables du jeu
         GUIState state = START_MENU;
 
-        Player localPlayer, enemyPlayer;
+        Player localPlayer;
         localPlayer.getNewRandomName();
         localPlayer.generateUUID();
 
@@ -25,7 +25,7 @@ int main(int argc, char *args[]) {
         cp.uuid = localPlayer.uuid;
 
         bool tryingToConnect = false;
-        string errorMessage;
+        string errorMessage, winnerName;
 
         GUI gui;
 
@@ -70,24 +70,40 @@ int main(int argc, char *args[]) {
                     }
                     break;
                 case CONNECT_MENU:
-                    if (!tryingToConnect) {
-                        tryingToConnect = true;
-                        socket.tryConnection();
+                    socket.openSocket();
+                    if (socket.getServerPacket().rightClient.name == localPlayer.name || socket.getServerPacket().leftClient.name == localPlayer.name) {
+                        state = WAIT_MENU;
                     }
                     break;
                 case WAIT_MENU:
-                    // TODO: Passer au menu INGAME_MENU dès lors qu'un enemi est indiqué dans le ServerPacket
+                    if (socket.getServerPacket().isEnemyConnected(localPlayer)) {
+                        state = INGAME_MENU;
+                    }
                 case INGAME_MENU:
-                    if (newKeystate[SDL_SCANCODE_DOWN] || newKeystate[SDL_SCANCODE_A]) {
-                        // TODO: Sauvegarder le contenu du prochain move du client a paddle down
+                    cp.paddleDirection = NONE; // By default set to none
+
+                    if (socket.getServerPacket().gameState == GAME_OVER) {
+                        if (socket.getServerPacket().rightClient.score == WIN_SCORE && socket.getServerPacket().rightClient.score == WIN_SCORE) {
+                            winnerName = socket.getServerPacket().leftClient.name + " et " + socket.getServerPacket().rightClient.name;
+                        } else if (socket.getServerPacket().rightClient.score == WIN_SCORE) {
+                            winnerName = socket.getServerPacket().rightClient.name;
+                        } else if (socket.getServerPacket().rightClient.score == WIN_SCORE) {
+                            winnerName = socket.getServerPacket().leftClient.name;
+                        } else {
+                            break;
+                        }
+                        state = WINNER_MENU;
+                        socket.closeSocket();
+                        break;
+                    } else if (newKeystate[SDL_SCANCODE_DOWN] || newKeystate[SDL_SCANCODE_A]) {
                         cp.paddleDirection = PADDLE_DOWN;
                     } else if (newKeystate[SDL_SCANCODE_UP] || newKeystate[SDL_SCANCODE_Q]) {
-                        // TODO: Sauvegarder le contenu du prochain move du client a paddle up
                         cp.paddleDirection = PADDLE_UP;
-                    } else {
-                        cp.paddleDirection = NONE;
                     }
                     break;
+                case ERROR_MENU:
+                    if (newKeystate[SDL_SCANCODE_LEFT])
+                        state = START_MENU;
                 default:
                     break;
             }
@@ -98,42 +114,25 @@ int main(int argc, char *args[]) {
             switch (state) {
                 case START_MENU:
                     gui.drawStartMenu(localPlayer.name);
-                    //SDL_Log("draw start menu");
                     break;
 
                 case CONNECT_MENU:
                     gui.drawConnectMenu();
-                    //SDL_Log("draw connectClient menu");
                     break;
 
                 case WAIT_MENU:
                     gui.drawWaitMenu();
-                    //SDL_Log("draw wait menu");
                     break;
 
                 case INGAME_MENU:
-                    /*//check score
-                    if (check_score() != 0) {
-                        state = GAME_OVER;
-                    } else {
-                        //paddle ai movement
-                        move_paddle_ai();
-
-                        //* Move the balls for the next frame.
-                        move_ball();
-                        if (state != GAME_START) {
-                            draw_net();
-                            draw_paddle();
-                            draw_ball();
-                            draw_score();
-                        }
-                    }*/
+                    gui.drawBall(socket.getServerPacket().ballX, socket.getServerPacket().ballY);
+                    gui.drawPaddles(socket.getServerPacket().leftClient.paddleX, socket.getServerPacket().leftClient.paddleY, socket.getServerPacket().rightClient.paddleX, socket.getServerPacket().rightClient.paddleY);
+                    gui.drawNet();
+                    gui.drawScore(socket.getServerPacket().leftClient.score, socket.getServerPacket().rightClient.score);
                     break;
 
                 case WINNER_MENU:
-                    //SDL_Log("draw winnerMenu");
-
-                    gui.drawWinnerMenu("bob");
+                    gui.drawWinnerMenu(winnerName);
                     break;
 
                 case ERROR_MENU:
@@ -155,6 +154,9 @@ int main(int argc, char *args[]) {
             }
 
         }
+
+        // Be sure to close conn if any
+        socket.closeSocket();
 
         // Delete everything
         gui.quit();
