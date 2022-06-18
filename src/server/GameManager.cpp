@@ -25,16 +25,16 @@ void GameManager::moveBall() {
 
     // Balle sortie laterale
     if (ball.x < 0) {
-        players[0].score += 1;
-        if (players[0].score == WIN_SCORE)
+        players[1].score += 1;
+        if (players[1].score == WIN_SCORE)
             gameState = GAME_OVER;
         initGame();
         return;
     }
 
     if (ball.x > SCREEN_WIDTH - 10) {
-        players[1].score += 1;
-        if (players[1].score == WIN_SCORE)
+        players[0].score += 1;
+        if (players[0].score == WIN_SCORE)
             gameState = GAME_OVER;
         initGame();
         return;
@@ -63,23 +63,25 @@ void GameManager::moveBall() {
     }
 }
 
-void GameManager::movePaddle(Player * player) {
-    PaddleDirection paddleDirection = player->paddleDir;
-    if (paddleDirection == NONE) return;
+void GameManager::movePaddle() {
+    
+    for (Player player : players) {
+        if (player.paddleDir == NONE) return;
 
-    if (paddleDirection == PADDLE_DOWN) {
-        // if the down arrow is pressed move paddle down
-        player->paddleY += PADDLE_STEP;
+        if (player.paddleDir == PADDLE_DOWN) {
+            // if the down arrow is pressed move paddle down
+            player.paddleY += PADDLE_STEP;
 
-        if(player->paddleY >= SCREEN_HEIGHT - PADDLE_HEIGHT) {
-            player->paddleY = SCREEN_HEIGHT - PADDLE_HEIGHT;
-        }
-    } else if (paddleDirection == PADDLE_UP) {
-        // if the up arrow is pressed move paddle up
-        player->paddleY -= PADDLE_STEP;
+            if (player.paddleY >= SCREEN_HEIGHT - PADDLE_HEIGHT) {
+                player.paddleY = SCREEN_HEIGHT - PADDLE_HEIGHT;
+            }
+        } else if (player.paddleDir == PADDLE_UP) {
+            // if the up arrow is pressed move paddle up
+            player.paddleY -= PADDLE_STEP;
 
-        if(player->paddleY <= 0) {
-            player->paddleY = 0;
+            if (player.paddleY <= 0) {
+                player.paddleY = 0;
+            }
         }
     }
 }
@@ -93,6 +95,9 @@ void GameManager::updatePlayer(const ClientPacket& clientPacket) {
     for (Player player : players)
         if (player.uuid == clientPacket.uuid) {
             player.paddleDir = clientPacket.paddleDirection;
+            if (player.uuid == players[0].uuid) {
+                cout << player.name << ": " << player.paddleDir << " -> " << player.paddleY << endl;
+            }
             return;
         }
     // Inscription

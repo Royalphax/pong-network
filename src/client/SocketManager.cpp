@@ -94,7 +94,7 @@ void SocketManager::clientThread() {
         SDL_Log("Data received : %s", trim(s_in).c_str());
         // ------------ -------- ------------
 
-        this_thread::sleep_for(chrono::milliseconds (10));
+        this_thread::sleep_for(chrono::milliseconds (2000));
 
     }
 

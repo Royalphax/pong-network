@@ -83,12 +83,12 @@ int main(int argc, char *args[]) {
                     cp.paddleDirection = NONE; // By default set to none
 
                     if (socket.getServerPacket().gameState == GAME_OVER) {
-                        if (socket.getServerPacket().rightClient.score == WIN_SCORE && socket.getServerPacket().rightClient.score == WIN_SCORE) {
-                            winnerName = socket.getServerPacket().leftClient.name + " et " + socket.getServerPacket().rightClient.name;
+                        if (socket.getServerPacket().rightClient.score == WIN_SCORE && socket.getServerPacket().leftClient.score == WIN_SCORE) {
+                            winnerName = socket.getServerPacket().leftClient.name + " et " + socket.getServerPacket().rightClient.name + " sont a egalite";
                         } else if (socket.getServerPacket().rightClient.score == WIN_SCORE) {
-                            winnerName = socket.getServerPacket().rightClient.name;
+                            winnerName = socket.getServerPacket().rightClient.name + " est le grand gagnant";
                         } else if (socket.getServerPacket().rightClient.score == WIN_SCORE) {
-                            winnerName = socket.getServerPacket().leftClient.name;
+                            winnerName = socket.getServerPacket().leftClient.name + " est le grand gagnant";
                         } else {
                             break;
                         }
@@ -132,7 +132,7 @@ int main(int argc, char *args[]) {
                     break;
 
                 case WINNER_MENU:
-                    gui.drawWinnerMenu(winnerName);
+                    gui.drawWinnerMenu(socket.getServerPacket().leftClient.score, socket.getServerPacket().rightClient.score, winnerName);
                     break;
 
                 case ERROR_MENU:

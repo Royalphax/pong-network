@@ -34,7 +34,7 @@ public:
 
     void drawText(int posX, int posY, const string& message, TTF_Font* police, TextAlign alignment = CENTER);
 
-    void drawWinnerMenu(const string& winnerName);
+    void drawWinnerMenu(int leftScore, int rightScore, const string& winnerName);
 
     void drawStartMenu(const string& localPlayerName);
 

@@ -126,7 +126,7 @@ void GUI::drawText(int posX, int posY, const string &message, TTF_Font *police, 
     SDL_FreeSurface(text_surface);
 }
 
-void GUI::drawWinnerMenu(const string& winnerName) {
+void GUI::drawWinnerMenu(int leftScore, int rightScore, const string& winnerName) {
     int titleX, titleY;
 
     titleX = screen->w / 2;
@@ -134,7 +134,7 @@ void GUI::drawWinnerMenu(const string& winnerName) {
 
     drawText(titleX, titleY - 100, "FIN DU JEU", fontBig);
 
-    drawText(titleX, titleY, "10 - 8", fontSmall);
+    drawText(titleX, titleY, to_string(leftScore) + " - " + to_string(rightScore), fontSmall);
     drawText(titleX, titleY + 30, winnerName + " est le grand gagnant", fontNormal);
 
     drawText(50, screen->h - 50, "[ECHAP] pour quitter", fontSmall, LEFT);

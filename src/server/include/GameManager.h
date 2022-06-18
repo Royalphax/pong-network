@@ -31,7 +31,7 @@ public:
 
     void moveBall(); // Move the ball at each tick
 
-    void movePaddle(Player * player); // Move the paddle in the right direction
+    void movePaddle(); // Move the paddle in the right direction
 
     bool isGameFull();
 

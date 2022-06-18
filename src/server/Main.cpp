@@ -25,8 +25,7 @@ int main(int argc, char* argv []) {
 
             case GAME_PLAY:
                 game.moveBall();
-                for (Player player : game.players)
-                    game.movePaddle(&player);
+                game.movePaddle();
                 this_thread::sleep_for(chrono::milliseconds(10));
                 break;
 

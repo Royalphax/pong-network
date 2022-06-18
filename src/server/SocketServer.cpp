@@ -28,7 +28,7 @@ void clientThread(sockpp::tcp_socket sock, GameManager * game, ServerPacket * pa
         last_uuid = clientPacket.uuid;
         game->updatePlayer(clientPacket);
 
-        cout << clientPacket.name + " : " << trim(s_in) << endl;
+        //cout << clientPacket.name + " : " << trim(s_in) << endl;
         // ------------ -------- ------------
 
         // ------------ ECRITURE ------------
