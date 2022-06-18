@@ -19,11 +19,14 @@ int main(int argc, char* argv []) {
             case GAME_START:
                 if (game.isGameFull())
                     game.gameState = GAME_PLAY;
+                    game.initGame();
                 this_thread::sleep_for(chrono::seconds(1));
                 break;
 
             case GAME_PLAY:
                 game.moveBall();
+                for (Player player : game.players)
+                    game.movePaddle(&player);
                 this_thread::sleep_for(chrono::milliseconds(50));
                 break;
 
@@ -47,7 +50,7 @@ int main(int argc, char* argv []) {
         packet.ballY = game.ball.y;
 
         // Tick
-        this_thread::sleep_for(chrono::milliseconds (10));
+        this_thread::sleep_for(chrono::milliseconds (5));
     }
 
     return 0;

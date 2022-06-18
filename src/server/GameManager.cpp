@@ -28,6 +28,7 @@ void GameManager::moveBall() {
         players[0].score += 1;
         if (players[0].score == WIN_SCORE)
             gameState = GAME_OVER;
+        initGame();
         return;
     }
 
@@ -35,6 +36,7 @@ void GameManager::moveBall() {
         players[1].score += 1;
         if (players[1].score == WIN_SCORE)
             gameState = GAME_OVER;
+        initGame();
         return;
     }
 
@@ -61,22 +63,23 @@ void GameManager::moveBall() {
     }
 }
 
-void GameManager::movePaddle(Player player, PaddleDirection paddleDirection) {
+void GameManager::movePaddle(Player * player) {
+    PaddleDirection paddleDirection = player->paddleDir;
     if (paddleDirection == NONE) return;
 
     if (paddleDirection == PADDLE_DOWN) {
         // if the down arrow is pressed move paddle down
-        player.paddleY += PADDLE_STEP;
+        player->paddleY += PADDLE_STEP;
 
-        if(player.paddleY >= SCREEN_HEIGHT - PADDLE_HEIGHT) {
-            player.paddleY = SCREEN_HEIGHT - PADDLE_HEIGHT;
+        if(player->paddleY >= SCREEN_HEIGHT - PADDLE_HEIGHT) {
+            player->paddleY = SCREEN_HEIGHT - PADDLE_HEIGHT;
         }
     } else if (paddleDirection == PADDLE_UP) {
         // if the up arrow is pressed move paddle up
-        player.paddleY -= PADDLE_STEP;
+        player->paddleY -= PADDLE_STEP;
 
-        if(player.paddleY <= 0) {
-            player.paddleY = 0;
+        if(player->paddleY <= 0) {
+            player->paddleY = 0;
         }
     }
 }
@@ -89,7 +92,6 @@ void GameManager::updatePlayer(const ClientPacket& clientPacket) {
     // Mise à jour
     for (Player player : players)
         if (player.uuid == clientPacket.uuid) {
-            movePaddle(player, clientPacket.paddleDirection);
             player.paddleDir = clientPacket.paddleDirection;
             return;
         }

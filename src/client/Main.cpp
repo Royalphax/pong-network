@@ -128,7 +128,7 @@ int main(int argc, char *args[]) {
                     gui.drawBall(socket.getServerPacket().ballX, socket.getServerPacket().ballY);
                     gui.drawPaddles(socket.getServerPacket().leftClient.paddleX, socket.getServerPacket().leftClient.paddleY, socket.getServerPacket().rightClient.paddleX, socket.getServerPacket().rightClient.paddleY);
                     gui.drawNet();
-                    gui.drawScore(socket.getServerPacket().leftClient.score, socket.getServerPacket().rightClient.score);
+                    gui.drawScore(socket.getServerPacket().leftClient.name, socket.getServerPacket().rightClient.name, socket.getServerPacket().leftClient.score, socket.getServerPacket().rightClient.score);
                     break;
 
                 case WINNER_MENU:

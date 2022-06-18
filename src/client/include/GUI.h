@@ -44,7 +44,7 @@ public:
 
     void drawWaitMenu();
 
-    void drawScore(int scoreLeft, int scoreRight);
+    void drawScore(const string& leftName, const string& rightName, int scoreLeft, int scoreRight);
 
     void drawNet();
 

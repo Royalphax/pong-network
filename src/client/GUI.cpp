@@ -221,14 +221,13 @@ void GUI::drawWaitMenu() {
 }
 
 
-void GUI::drawScore(int scoreLeft, int scoreRight) {
-    char str_score[] = "0";
+void GUI::drawScore(const string& leftName, const string& rightName, int scoreLeft, int scoreRight) {
 
-    str_score[0] = '0' + scoreLeft;
-    drawText( (screen->w/2) - 55, 20, str_score, fontBig );
+    drawText( (screen->w/2) - 85, 50, leftName, fontNormal, RIGHT );
+    drawText( (screen->w/2) - 55, 50, to_string(scoreLeft), fontBig );
 
-    str_score[0] = '0' + scoreRight;
-    drawText( (screen->w/2) + 55, 20, str_score, fontBig );
+    drawText( (screen->w/2) + 85, 50, rightName, fontNormal, LEFT );
+    drawText( (screen->w/2) + 55, 50, to_string(scoreRight), fontBig );
 }
 
 void GUI::drawNet() {

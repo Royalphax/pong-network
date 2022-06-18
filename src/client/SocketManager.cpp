@@ -94,19 +94,13 @@ void SocketManager::clientThread() {
         // SDL_Log("Data received : %s", trim(s_in).c_str());
         // ------------ -------- ------------
 
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::milliseconds (10));
 
     }
 
     if (!conn.close()) {
         SDL_Log("Error on closing stream: %s", conn.last_error_str().c_str());
         *errorMessage = "Erreur lors de la fermeture de la connexion";
-        *guiState = ERROR_MENU;
-    }
-
-    if (!conn) {
-        SDL_Log("Wrong connexion");
-        *errorMessage = "Erreur de connexion";
         *guiState = ERROR_MENU;
     }
 
