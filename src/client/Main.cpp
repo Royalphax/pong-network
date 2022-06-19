@@ -24,7 +24,6 @@ int main(int argc, char *args[]) {
         cp.name = localPlayer.name;
         cp.uuid = localPlayer.uuid;
 
-        bool tryingToConnect = false;
         string errorMessage, winnerName;
 
         GUI gui;
@@ -76,9 +75,8 @@ int main(int argc, char *args[]) {
                     }
                     break;
                 case WAIT_MENU:
-                    if (socket.getServerPacket().isEnemyConnected(localPlayer)) {
+                    if (socket.getServerPacket().isEnemyConnected(localPlayer))
                         state = INGAME_MENU;
-                    }
                 case INGAME_MENU:
                     cp.paddleDirection = NONE; // By default set to none
 
@@ -87,10 +85,8 @@ int main(int argc, char *args[]) {
                             winnerName = socket.getServerPacket().leftClient.name + " et " + socket.getServerPacket().rightClient.name + " sont a egalite";
                         } else if (socket.getServerPacket().rightClient.score == WIN_SCORE) {
                             winnerName = socket.getServerPacket().rightClient.name + " est le grand gagnant";
-                        } else if (socket.getServerPacket().rightClient.score == WIN_SCORE) {
+                        } else if (socket.getServerPacket().leftClient.score == WIN_SCORE) {
                             winnerName = socket.getServerPacket().leftClient.name + " est le grand gagnant";
-                        } else {
-                            break;
                         }
                         state = WINNER_MENU;
                         socket.closeSocket();

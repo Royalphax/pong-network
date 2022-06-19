@@ -12,6 +12,7 @@
 #include <string>
 #include "Player.h"
 #include <iostream>
+#include <mutex>
 
 using namespace std;
 
@@ -23,6 +24,8 @@ typedef struct Ball {
 class GameManager {
 
 public:
+    mutex mu;
+
     GameState gameState = UNKNOWN;
     virtualBall ball;
     Player players[2] = {Player(), Player()};
@@ -31,13 +34,13 @@ public:
 
     void moveBall(); // Move the ball at each tick
 
-    void movePaddle(); // Move the paddle in the right direction
+    void movePaddle(Player * player); // Move the paddle in the right direction
 
     bool isGameFull();
 
     void updatePlayer(const ClientPacket& clientPacket);
 
-    void disconnectPlayer(string uuid);
+    void disconnectPlayer(const string& uuid);
 
 };
 

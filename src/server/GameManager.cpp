@@ -8,14 +8,20 @@
 void GameManager::initGame() {
     ball.x = SCREEN_WIDTH / 2;
     ball.y = SCREEN_HEIGHT / 2;
-    ball.dy = 1;
-    ball.dx = 1;
 
+    random_device r;
+    mt19937 engine{r()};
+    uniform_int_distribution<int> distrib1(0,2);
+    ball.dy = distrib1(engine) - 1;
+    ball.dx = distrib1(engine) - 1;
+
+    mu.lock();
     players[0].paddleX = 20;
     players[0].paddleY = SCREEN_HEIGHT / 2 - 50 ;
 
     players[1].paddleX = SCREEN_WIDTH - 20 - 10;
     players[1].paddleY = SCREEN_HEIGHT / 2 - 50;
+    mu.unlock();
 }
 
 void GameManager::moveBall() {
@@ -25,17 +31,21 @@ void GameManager::moveBall() {
 
     // Balle sortie laterale
     if (ball.x < 0) {
+        mu.lock();
         players[1].score += 1;
         if (players[1].score == WIN_SCORE)
             gameState = GAME_OVER;
+        mu.unlock();
         initGame();
         return;
     }
 
     if (ball.x > SCREEN_WIDTH - 10) {
+        mu.lock();
         players[0].score += 1;
         if (players[0].score == WIN_SCORE)
             gameState = GAME_OVER;
+        mu.unlock();
         initGame();
         return;
     }
@@ -46,6 +56,7 @@ void GameManager::moveBall() {
     }
 
     // Check for collision with the paddle
+    mu.lock();
     for (const Player& player : players) {
 
         // Collision detected
@@ -53,51 +64,57 @@ void GameManager::moveBall() {
 
             // Accelerer la balle			
             ball.dx +=  (ball.dx < 0) ? -1: 1;
-            //change ball direction
+            // Change ball direction
             ball.dx = -ball.dx;
 
-            // Change ball angle based on where on the paddle it hit
+            // Change ball angle based on where on the paddle hitted it
             int hit_pos = (player.paddleY + PADDLE_HEIGHT) - ball.y;
             ball.dy = 4 - (int)(hit_pos / 7);
         }
     }
+    mu.unlock();
 }
 
-void GameManager::movePaddle() {
-    
-    for (Player player : players) {
-        if (player.paddleDir == NONE) return;
+void GameManager::movePaddle(Player * player) {
+        if (player->paddleDir == NONE) {
+            return;
+        }
 
-        if (player.paddleDir == PADDLE_DOWN) {
+        if (player->paddleDir == PADDLE_DOWN) {
             // if the down arrow is pressed move paddle down
-            player.paddleY += PADDLE_STEP;
+            player->paddleY += PADDLE_STEP;
 
-            if (player.paddleY >= SCREEN_HEIGHT - PADDLE_HEIGHT) {
-                player.paddleY = SCREEN_HEIGHT - PADDLE_HEIGHT;
+            if (player->paddleY >= SCREEN_HEIGHT - PADDLE_HEIGHT) {
+                player->paddleY = SCREEN_HEIGHT - PADDLE_HEIGHT;
             }
-        } else if (player.paddleDir == PADDLE_UP) {
+        } else if (player->paddleDir == PADDLE_UP) {
             // if the up arrow is pressed move paddle up
-            player.paddleY -= PADDLE_STEP;
+            player->paddleY -= PADDLE_STEP;
 
-            if (player.paddleY <= 0) {
-                player.paddleY = 0;
+            if (player->paddleY <= 0) {
+                player->paddleY = 0;
             }
         }
-    }
 }
 
 bool GameManager::isGameFull() {
-    return (players[0].name != "null" and players[1].name != "null");
+    mu.lock();
+    bool output = (players[0].name != "null" and players[1].name != "null");
+    mu.unlock();
+    return output;
 }
 
 void GameManager::updatePlayer(const ClientPacket& clientPacket) {
     // Mise à jour
+    mu.lock();
     for (Player player : players)
         if (player.uuid == clientPacket.uuid) {
             player.paddleDir = clientPacket.paddleDirection;
+            movePaddle(&player);
             if (player.uuid == players[0].uuid) {
                 cout << player.name << ": " << player.paddleDir << " -> " << player.paddleY << endl;
             }
+            mu.unlock();
             return;
         }
     // Inscription
@@ -108,9 +125,11 @@ void GameManager::updatePlayer(const ClientPacket& clientPacket) {
         players[1].uuid = clientPacket.uuid;
         players[1].name = clientPacket.name;
     }
+    mu.unlock();
 }
 
-void GameManager::disconnectPlayer(string uuid) {
+void GameManager::disconnectPlayer(const string& uuid) {
+    mu.lock();
     if (gameState == GAME_START) {
         players[0].clear();
     } else if (gameState == GAME_PLAY) {
@@ -122,4 +141,5 @@ void GameManager::disconnectPlayer(string uuid) {
             gameState = GAME_OVER;
         }
     }
+    mu.unlock();
 }

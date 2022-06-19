@@ -135,7 +135,7 @@ void GUI::drawWinnerMenu(int leftScore, int rightScore, const string& winnerName
     drawText(titleX, titleY - 100, "FIN DU JEU", fontBig);
 
     drawText(titleX, titleY, to_string(leftScore) + " - " + to_string(rightScore), fontSmall);
-    drawText(titleX, titleY + 30, winnerName + " est le grand gagnant", fontNormal);
+    drawText(titleX, titleY + 30, winnerName, fontNormal);
 
     drawText(50, screen->h - 50, "[ECHAP] pour quitter", fontSmall, LEFT);
 }

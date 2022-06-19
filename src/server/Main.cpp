@@ -25,7 +25,7 @@ int main(int argc, char* argv []) {
 
             case GAME_PLAY:
                 game.moveBall();
-                game.movePaddle();
+
                 this_thread::sleep_for(chrono::milliseconds(10));
                 break;
 
@@ -33,7 +33,9 @@ int main(int argc, char* argv []) {
                 cout << "Game Over" << endl;
                 this_thread::sleep_for(chrono::seconds(5));
                 cout << "Restarting" << endl;
+                game.mu.lock();
                 for (Player player : game.players) player.clear();
+                game.mu.unlock();
                 game.gameState = GAME_START;
                 break;
 
@@ -42,11 +44,14 @@ int main(int argc, char* argv []) {
                 break;
         }
         // Update server packet to send
+        game.mu.lock();
         packet.updateLeftClient(game.players[0]);
         packet.updateRightClient(game.players[1]);
+        game.mu.unlock();
         packet.gameState = game.gameState;
         packet.ballX = game.ball.x;
         packet.ballY = game.ball.y;
+
     }
 
     return 0;
