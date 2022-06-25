@@ -23,12 +23,6 @@ enum ConnectState {
     CONNECTED
 };
 
-struct bridge {
-    ClientPacket * packet;
-    GUIState * state;
-    string * errMessage;
-};
-
 class SocketManager {
 
 private:
@@ -38,6 +32,7 @@ private:
     ClientPacket * clientPacket;
     GUIState * guiState;
     string * errorMessage;
+    thread socketThread;
 
     bool closeConnection;
 

@@ -17,7 +17,7 @@ void SocketManager::openSocket() {
     connectState = TRYING_TO_CONNECT;
     closeConnection = false;
 
-    thread socketThread(&SocketManager::clientThread, this);
+    socketThread = thread(&SocketManager::clientThread, this);
     socketThread.detach();
 }
 
@@ -34,7 +34,7 @@ void SocketManager::clientThread() {
     sockpp::tcp_connector conn({host, port});
     if (!conn) {
         SDL_Log("Error connecting to server at %s, last error is %s", sockpp::inet_address(host, port).to_string().c_str(), conn.last_error_str().c_str());
-        *errorMessage = "Erreur lors de la tentative de connexion";
+        *errorMessage = "Erreur serveur inaccessible";
         *guiState = ERROR_MENU;
         return;
     }
@@ -59,7 +59,6 @@ void SocketManager::clientThread() {
                 *errorMessage = "Erreur lors de la fermeture de la connexion";
                 *guiState = ERROR_MENU;
             }
-            connectState = NOT_CONNECTED;
             break;
         }
 
@@ -94,7 +93,7 @@ void SocketManager::clientThread() {
         SDL_Log("Data received : %s", trim(s_in).c_str());
         // ------------ -------- ------------
 
-        this_thread::sleep_for(chrono::milliseconds (2000));
+        this_thread::sleep_for(chrono::milliseconds (100));
 
     }
 
@@ -113,4 +112,8 @@ ServerPacket SocketManager::getServerPacket() {
 
 void SocketManager::closeSocket() {
     closeConnection = true;
+    connectState = NOT_CONNECTED;
+    if (socketThread.joinable()) {
+        socketThread.join();
+    }
 }

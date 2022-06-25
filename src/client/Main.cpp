@@ -4,13 +4,9 @@
 #include <thread>
 #include <Player.h>
 #include "SocketManager.h"
-#include <thread>
-
-void lol(int i) {
-
-}
 
 int main(int argc, char *args[]) {
+
     try {
 
         // Initialisation des variables du jeu
@@ -75,10 +71,15 @@ int main(int argc, char *args[]) {
                     }
                     break;
                 case WAIT_MENU:
-                    if (socket.getServerPacket().isEnemyConnected(localPlayer))
+                    if (socket.getServerPacket().isEnemyConnected(localPlayer)) {
                         state = INGAME_MENU;
+                    }
+                    if (newKeystate[SDL_SCANCODE_LEFT]) {
+                        state = START_MENU;
+                        socket.closeSocket();
+                    }
                 case INGAME_MENU:
-                    cp.paddleDirection = NONE; // By default set to none
+                    cp.paddleDirection = NONE; // By default reset to none
 
                     if (socket.getServerPacket().gameState == GAME_OVER) {
                         if (socket.getServerPacket().rightClient.score == WIN_SCORE && socket.getServerPacket().leftClient.score == WIN_SCORE) {
@@ -98,8 +99,10 @@ int main(int argc, char *args[]) {
                     }
                     break;
                 case ERROR_MENU:
-                    if (newKeystate[SDL_SCANCODE_LEFT])
+                    if (newKeystate[SDL_SCANCODE_LEFT]) {
                         state = START_MENU;
+                        socket.closeSocket();
+                    }
                 default:
                     break;
             }

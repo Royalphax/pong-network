@@ -30,17 +30,23 @@ public:
     virtualBall ball;
     Player players[2] = {Player(), Player()};
 
+    GameManager();
+
     void initGame(); // Init position of ball and paddles
 
     void moveBall(); // Move the ball at each tick
 
-    void movePaddle(Player * player); // Move the paddle in the right direction
+    static void movePaddle(Player * player); // Move the paddle in the right direction
 
     bool isGameFull();
 
     void updatePlayer(const ClientPacket& clientPacket);
 
     void disconnectPlayer(const string& uuid);
+
+    void playersDataLock();
+
+    void playersDataUnlock();
 
 };
 

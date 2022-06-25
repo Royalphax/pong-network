@@ -6,29 +6,43 @@
 
 void clientThread(sockpp::tcp_socket sock, GameManager * game, ServerPacket * packet)
 {
-    string last_uuid;
+    string last_uuid, s_out, s_in;
+    ssize_t n;
+
+    auto t_start_tx = high_resolution_clock::now(), t_now = high_resolution_clock::now();
 
     while (sock.is_open()) {
-
-        string s_out, s_in;
+        cout << "d1" << endl;
+        t_start_tx = high_resolution_clock::now();
+        cout << "d2" << endl;
         // ------------ LECTURE  ------------
         s_in.resize(DATA_BUFFER_CLIENT);
-        ssize_t n = 0;
-        while (n == 0) {
+        cout << "d3" << endl;
+        while (n != DATA_BUFFER_CLIENT && fpsec(t_now - t_start_tx).count() < SERVER_CLIENT_TIMEOUT) {
             n = sock.read_n(&s_in[0], DATA_BUFFER_CLIENT);
+            t_now = high_resolution_clock::now();
+            cout << "d4" << endl;
         }
+        cout << "d5" << endl;
+        cout << n << endl;
 
         if (n != DATA_BUFFER_CLIENT) {
             cout << "Error reading to the TCP stream: " << sock.last_error_str() << endl;
             break;
         }
 
-        ClientPacket clientPacket;
-        clientPacket.deserialize(s_in);
-        last_uuid = clientPacket.uuid;
-        game->updatePlayer(clientPacket);
+        cout << "d6" << endl;
 
-        //cout << clientPacket.name + " : " << trim(s_in) << endl;
+        ClientPacket clientPacket;
+        cout << "d7" << endl;
+        clientPacket.deserialize(s_in);
+        cout << "d8" << endl;
+        last_uuid = clientPacket.uuid;
+        cout << "d9" << endl;
+        game->updatePlayer(clientPacket);
+        cout << "d10" << endl;
+
+        // cout << clientPacket.name + " : " << trim(s_in) << endl;
         // ------------ -------- ------------
 
         // ------------ ECRITURE ------------
@@ -38,19 +52,23 @@ void clientThread(sockpp::tcp_socket sock, GameManager * game, ServerPacket * pa
             cout << "Server buffer too small" << endl;
             break;
         }
+        cout << "d11" << endl;
 
-        if (sock.write(s_out) == -1) {
+        if (sock.write_n(&s_out[0], DATA_BUFFER_SERVER) == -1) {
             cout << "Error writing to the TCP stream: " << sock.last_error_str() << endl;
             break;
         }
+        cout << "d12" << endl;
 
-        //cout << "Data sent : " << trim(s_out) << endl;
+        if (game->players[0].uuid == last_uuid)
+            cout << "Data sent : " << trim(s_out) << endl;
         // ------------ -------- ------------
     }
 
     // Inform that player disconnects
+    cout << "d13" << endl;
     game->disconnectPlayer(last_uuid);
-
+    cout << "d14" << endl;
     cout << "Connection closed from " << sock.peer_address() << endl;
     if (!sock.close()) {
         cout << "Error on closing stream: " << sock.last_error_str() << endl;
