@@ -3,17 +3,18 @@
 <h1>Pong Network</h1>
 <p><i>Le jeu du pong, en réseau !</i><br/><b>Développeurs : </b>Charles B, Nicolas V, Simon D, Thérence F</p>
 <h2>Liens utiles</h2>
-<a href="https://github.com/fabrice1618/pong" target="blank">Projet initial de @fabrice1618</a>
+<a href="https://github.com/fabrice1618/pong" target="_blank">Projet initial de @fabrice1618</a>
 <br/>
-<a href="https://github.com/users/Royalphax/projects/2" target="blank">Backlog et suivi des tâches</a>
+<a href="https://github.com/users/Royalphax/projects/2" target="_blank">Backlog et suivi des tâches</a>
 <br/>
-<a href="https://blog.ahmadz.ai/sdl2-for-clion-and-cmake/" target="blank">Tuto installation SDL2</a>
+<a href="https://blog.ahmadz.ai/sdl2-for-clion-and-cmake/" target="_blank">Tuto installation SDL2</a>
 <br/>
-<a href="https://www.geeksforgeeks.org/handling-multiple-clients-on-server-with-multithreading-using-socket-programming-in-c-cpp/" target="blank">Tuto socket C++</a>
+<a href="https://www.geeksforgeeks.org/handling-multiple-clients-on-server-with-multithreading-using-socket-programming-in-c-cpp/" target="_blank">Tuto socket C++</a>
 <br/>
-<a href="https://gamedev.stackexchange.com/questions/197232/how-to-create-editable-sdl2-text-input-boxes" target="blank">Création entrée textuelle SDL2</a>
+<a href="https://gamedev.stackexchange.com/questions/197232/how-to-create-editable-sdl2-text-input-boxes" target="_blank">Création entrée textuelle SDL2</a>
 <br/>
-...
+<a href="https://youtu.be/mbwK-i2WTbY" target="_blank">Vidéo démonstration de la V1</a>
+
 <hr/>
 </div>
 
