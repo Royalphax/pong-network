@@ -11,8 +11,7 @@ int main(int argc, char* argv []) {
     GameManager game;
     game.gameState = GAME_START;
 
-    ServerPacket packet;
-    startServer(&game, &packet);
+    startServer(&game);
 
     while (1) { // Game process
         switch (game.gameState) {
@@ -33,9 +32,9 @@ int main(int argc, char* argv []) {
                 cout << "Game Over" << endl;
                 this_thread::sleep_for(chrono::seconds(5));
                 cout << "Restarting" << endl;
-                game.playersDataLock();
+                game.lockPlayersData();
                 for (auto & player : game.players) player.clear();
-                game.playersDataUnlock();
+                game.unlockPlayersData();
                 game.gameState = GAME_START;
                 break;
 
@@ -44,13 +43,15 @@ int main(int argc, char* argv []) {
                 break;
         }
         // Update server packet to send
-        game.playersDataLock();
-        packet.updateLeftClient(game.players[0]);
-        packet.updateRightClient(game.players[1]);
-        game.playersDataUnlock();
-        packet.gameState = game.gameState;
-        packet.ballX = game.ball.x;
-        packet.ballY = game.ball.y;
+        game.lockServerPacket();
+        game.lockPlayersData();
+        game.packet.updateLeftClient(game.players[0]);
+        game.packet.updateRightClient(game.players[1]);
+        game.unlockPlayersData();
+        game.packet.gameState = game.gameState;
+        game.packet.ballX = game.ball.x;
+        game.packet.ballY = game.ball.y;
+        game.unlockServerPacket();
 
     }
 

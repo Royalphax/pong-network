@@ -21,13 +21,13 @@ void GameManager::initGame() {
 
     cout << "Init game" << endl;
 
-    playersDataLock();
+    lockPlayersData();
     players[0].paddleX = 20;
     players[0].paddleY = SCREEN_HEIGHT / 2 - 50 ;
 
     players[1].paddleX = SCREEN_WIDTH - 20 - 10;
     players[1].paddleY = SCREEN_HEIGHT / 2 - 50;
-    playersDataUnlock();
+    unlockPlayersData();
 }
 
 void GameManager::moveBall() {
@@ -37,21 +37,21 @@ void GameManager::moveBall() {
 
     // Balle sortie laterale
     if (ball.x < 0) {
-        playersDataLock();
+        lockPlayersData();
         players[1].score += 1;
         if (players[1].score == WIN_SCORE)
             gameState = GAME_OVER;
-        playersDataUnlock();
+        unlockPlayersData();
         initGame();
         return;
     }
 
     if (ball.x > SCREEN_WIDTH - 10) {
-        playersDataLock();
+        lockPlayersData();
         players[0].score += 1;
         if (players[0].score == WIN_SCORE)
             gameState = GAME_OVER;
-        playersDataUnlock();
+        unlockPlayersData();
         initGame();
         return;
     }
@@ -62,7 +62,7 @@ void GameManager::moveBall() {
     }
 
     // Check for collision with the paddle
-    playersDataLock();
+    lockPlayersData();
     for (const Player& player : players) {
 
         // Collision detected
@@ -78,7 +78,7 @@ void GameManager::moveBall() {
             ball.dy = 4 - (int)(hit_pos / 7);
         }
     }
-    playersDataUnlock();
+    unlockPlayersData();
 }
 
 void GameManager::movePaddle(Player * player) {
@@ -104,31 +104,34 @@ void GameManager::movePaddle(Player * player) {
 }
 
 bool GameManager::isGameFull() {
-    playersDataLock();
+    lockPlayersData();
     bool output = (players[0].name != "null" and players[1].name != "null");
-    playersDataUnlock();
+    unlockPlayersData();
     return output;
 }
 
 void GameManager::updatePlayer(const ClientPacket& clientPacket) {
     // Mise à jour
-    playersDataLock();
+    lockPlayersData();
     for (auto & player : players) {
         if (player.uuid == clientPacket.uuid) {
+            cout << "MAJ" << endl;
             player.paddleDir = clientPacket.paddleDirection;
-            //movePaddle(&player);
+            movePaddle(&player);
             break;
         } else if (player.name == "null") {
+            cout << "INSCRIPTION" << endl;
             player.uuid = clientPacket.uuid;
             player.name = clientPacket.name;
             break;
         }
+        cout << "NON" << endl;
     }
-    playersDataUnlock();
+    unlockPlayersData();
 }
 
 void GameManager::disconnectPlayer(const string& uuid) {
-    playersDataLock();
+    lockPlayersData();
     if (gameState == GAME_START) {
         players[0].clear();
     } else if (gameState == GAME_PLAY) {
@@ -140,13 +143,21 @@ void GameManager::disconnectPlayer(const string& uuid) {
             gameState = GAME_OVER;
         }
     }
-    playersDataUnlock();
+    unlockPlayersData();
 }
 
-void GameManager::playersDataLock() {
-    mu.lock();
+void GameManager::lockPlayersData() {
+    playersDataLocker.lock();
 }
 
-void GameManager::playersDataUnlock() {
-    mu.unlock();
+void GameManager::unlockPlayersData() {
+    playersDataLocker.unlock();
+}
+
+void GameManager::lockServerPacket() {
+    serverPacketLocker.lock();
+}
+
+void GameManager::unlockServerPacket() {
+    serverPacketLocker.unlock();
 }

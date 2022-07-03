@@ -75,7 +75,8 @@ void SocketManager::clientThread() {
 
         conn.write(s_out);
 
-        // SDL_Log("Data sent : %s", trim(s_out).c_str());
+        SDL_Log("-----------------------------------");
+        SDL_Log("Data sent : %s", trim(s_out).c_str());
         // ------------ -------- ------------
 
         // ------------ LECTURE  ------------
@@ -91,9 +92,10 @@ void SocketManager::clientThread() {
 
         serverPacket.deserialize(s_in);
         SDL_Log("Data received : %s", trim(s_in).c_str());
+        SDL_Log("-----------------------------------");
         // ------------ -------- ------------
 
-        this_thread::sleep_for(chrono::milliseconds (100));
+        this_thread::sleep_for(chrono::milliseconds (2000));
 
     }
 

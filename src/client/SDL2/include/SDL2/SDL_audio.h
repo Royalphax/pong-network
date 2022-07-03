@@ -760,7 +760,7 @@ extern DECLSPEC void SDLCALL SDL_PauseAudioDevice(SDL_AudioDeviceID dev,
  *
  * Supported formats are RIFF WAVE files with the formats PCM (8, 16, 24, and
  * 32 bits), IEEE Float (32 bits), Microsoft ADPCM and IMA ADPCM (4 bits), and
- * A-law and mu-law (8 bits). Other formats are currently unsupported and
+ * A-law and playersDataLocker-law (8 bits). Other formats are currently unsupported and
  * cause an error.
  *
  * If this function succeeds, the pointer returned by it is equal to `spec`

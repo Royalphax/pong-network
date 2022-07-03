@@ -9,6 +9,7 @@
 #include "GameState.h"
 #include "Constant.h"
 #include "ClientPacket.h"
+#include "ServerPacket.h"
 #include <string>
 #include "Player.h"
 #include <iostream>
@@ -24,7 +25,9 @@ typedef struct Ball {
 class GameManager {
 
 public:
-    mutex mu;
+    mutex playersDataLocker, serverPacketLocker;
+
+    ServerPacket packet;
 
     GameState gameState = UNKNOWN;
     virtualBall ball;
@@ -44,9 +47,13 @@ public:
 
     void disconnectPlayer(const string& uuid);
 
-    void playersDataLock();
+    void lockPlayersData();
 
-    void playersDataUnlock();
+    void unlockPlayersData();
+
+    void lockServerPacket();
+
+    void unlockServerPacket();
 
 };
 
