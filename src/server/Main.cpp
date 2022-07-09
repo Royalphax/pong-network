@@ -20,7 +20,6 @@ int main(int argc, char* argv []) {
                     game.gameState = GAME_PLAY;
                     game.initGame();
                 }
-                this_thread::sleep_for(chrono::milliseconds(200));
                 break;
 
             case GAME_PLAY:
@@ -30,6 +29,7 @@ int main(int argc, char* argv []) {
 
             case GAME_OVER:
                 cout << "Game Over" << endl;
+                game.packet.gameState = GAME_OVER;
                 this_thread::sleep_for(chrono::seconds(5));
                 cout << "Restarting" << endl;
                 game.lockPlayersData();
@@ -42,17 +42,6 @@ int main(int argc, char* argv []) {
                 // Do nothing
                 break;
         }
-        // Update server packet to send
-        game.lockServerPacket();
-        game.lockPlayersData();
-        game.packet.updateLeftClient(game.players[0]);
-        game.packet.updateRightClient(game.players[1]);
-        game.unlockPlayersData();
-        game.packet.gameState = game.gameState;
-        game.packet.ballX = game.ball.x;
-        game.packet.ballY = game.ball.y;
-        game.unlockServerPacket();
-
     }
 
     return 0;

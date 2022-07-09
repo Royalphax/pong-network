@@ -51,6 +51,8 @@ void clientThread(sockpp::tcp_socket sock, GameManager * game)
         // cout << clientPacket.name + " : " << trim(s_in) << endl;
         // ------------ -------- ------------
 
+        game->updatePacket();
+
         // ------------ ECRITURE ------------
         game->lockServerPacket();
         s_out = game->packet.serialize();

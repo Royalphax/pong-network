@@ -47,6 +47,8 @@ public:
 
     void disconnectPlayer(const string& uuid);
 
+    void updatePacket();
+
     void lockPlayersData();
 
     void unlockPlayersData();

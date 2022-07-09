@@ -146,6 +146,18 @@ void GameManager::disconnectPlayer(const string& uuid) {
     unlockPlayersData();
 }
 
+void GameManager::updatePacket() {
+    lockServerPacket();
+    lockPlayersData();
+    packet.updateLeftClient(players[0]);
+    packet.updateRightClient(players[1]);
+    unlockPlayersData();
+    packet.gameState = gameState;
+    packet.ballX = ball.x;
+    packet.ballY = ball.y;
+    unlockServerPacket();
+}
+
 void GameManager::lockPlayersData() {
     playersDataLocker.lock();
 }
