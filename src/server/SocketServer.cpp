@@ -27,10 +27,10 @@ void clientThread(sockpp::tcp_socket sock, GameManager * game)
         }
         // cout << "d5" << endl;
         // cout << n << endl;
-        if (game->players[0].uuid == last_uuid) {
-            cout << "---------------------------" << endl;
-            cout << "Data received : " << trim(s_in) << endl;
-        }
+//        if (game->players[0].uuid == last_uuid) {
+//            cout << "---------------------------" << endl;
+//            cout << "Data received : " << trim(s_in) << endl;
+//        }
 
         if (n != DATA_BUFFER_CLIENT) {
             cout << "Error reading to the TCP stream: " << sock.last_error_str() << endl;
@@ -63,9 +63,9 @@ void clientThread(sockpp::tcp_socket sock, GameManager * game)
             break;
         }
         // cout << "d11" << endl;
-        if (game->players[0].uuid == last_uuid) {
-            cout << "Data sent : " << trim(s_out) << endl;
-        }
+//        if (game->players[0].uuid == last_uuid) {
+//            cout << "Data sent : " << trim(s_out) << endl;
+//        }
 
         if (sock.write_n(&s_out[0], DATA_BUFFER_SERVER) == -1) {
             cout << "Error writing to the TCP stream: " << sock.last_error_str() << endl;

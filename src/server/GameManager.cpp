@@ -115,17 +115,17 @@ void GameManager::updatePlayer(const ClientPacket& clientPacket) {
     lockPlayersData();
     for (auto & player : players) {
         if (player.uuid == clientPacket.uuid) {
-            cout << "MAJ" << endl;
+//            cout << "MAJ" << endl;
             player.paddleDir = clientPacket.paddleDirection;
             movePaddle(&player);
             break;
         } else if (player.name == "null") {
-            cout << "INSCRIPTION" << endl;
+//            cout << "INSCRIPTION" << endl;
             player.uuid = clientPacket.uuid;
             player.name = clientPacket.name;
             break;
         }
-        cout << "NON" << endl;
+//        cout << "NON" << endl;
     }
     unlockPlayersData();
 }
